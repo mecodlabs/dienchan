@@ -1,0 +1,47 @@
+[
+  {
+    "id": "proto-calm",
+    "name": "Bộ Ổn định thần kinh",
+    "description": "Giúp thư giãn hệ thần kinh, hỗ trợ cải thiện giấc ngủ, giảm căng thẳng lo âu và đau đầu do stress.",
+    "pointCodes": ["124", "34", "26", "103", "106", "127", "0"],
+    "isBuiltin": true,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "proto-immunity",
+    "name": "Bộ Tăng sức đề kháng",
+    "description": "Nâng cao chính khí, hỗ trợ phục hồi thể trạng, cải thiện tuần hoàn và sức chống chịu của cơ thể.",
+    "pointCodes": ["127", "50", "37", "19", "300", "0"],
+    "isBuiltin": true,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "proto-anti-inflam",
+    "name": "Bộ Tiêu viêm — Giảm đau cơ bản",
+    "description": "Phác đồ nền tảng hỗ trợ làm dịu ổ viêm, giảm sưng đau khớp, đau họng hoặc nhức mỏi cục bộ.",
+    "pointCodes": ["41", "143", "127", "19", "37", "38", "61", "16", "0"],
+    "isBuiltin": true,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "proto-sinus",
+    "name": "Bộ Thông mũi — Viêm xoang",
+    "description": "Hỗ trợ làm thông thoáng đường thở, giảm nghẹt mũi, sổ mũi và nặng vùng trán – gò má do xoang.",
+    "pointCodes": ["26", "106", "189", "61", "73", "19", "127", "0"],
+    "isBuiltin": true,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "proto-head-neck",
+    "name": "Bộ Đau đầu — Cổ vai gáy",
+    "description": "Giải tỏa co cứng vùng cổ gáy, giảm căng nặng vùng thái dương, đỉnh đầu và quanh hốc mắt.",
+    "pointCodes": ["26", "65", "34", "130", "124", "73", "60", "275", "14", "0"],
+    "isBuiltin": true,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  }
+]

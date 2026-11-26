@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Diện Chẩn Atlas Data Schema",
+  "type": "object",
+  "definitions": {
+    "Point2D": {
+      "type": "object",
+      "required": ["x", "y"],
+      "properties": {
+        "x": { "type": "number", "minimum": 0, "maximum": 1000 },
+        "y": { "type": "number", "minimum": 0, "maximum": 1200 }
+      }
+    },
+    "Acupoint": {
+      "type": "object",
+      "required": [
+        "code",
+        "name",
+        "region",
+        "regionLabel",
+        "laterality",
+        "gridRef",
+        "howToLocate",
+        "indications",
+        "verificationStatus",
+        "views"
+      ],
+      "properties": {
+        "code": { "type": "string" },
+        "name": { "type": "string" },
+        "region": {
+          "type": "string",
+          "enum": ["forehead", "eyes", "nose", "cheeks", "mouth-chin", "ears-jaw"]
+        },
+        "regionLabel": { "type": "string" },
+        "laterality": {
+          "type": "string",
+          "enum": ["midline", "bilateral", "left", "right"]
+        },
+        "gridRef": {
+          "type": "object",
+          "required": ["vertical", "horizontal"],
+          "properties": {
+            "vertical": { "type": "string" },
+            "horizontal": { "type": "string" }
+          }
+        },
+        "howToLocate": { "type": "string" },
+        "indications": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "organReflection": { "type": "string" },
+        "cautions": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "verificationStatus": {
+          "type": "string",
+          "enum": ["core-reference", "user-verified"]
+        },
+        "views": {
+          "type": "object",
+          "properties": {
+            "front": { "$ref": "#/definitions/Point2D" },
+            "side": { "$ref": "#/definitions/Point2D" }
+          }
+        }
+      }
+    },
+    "PointCollection": {
+      "type": "object",
+      "required": ["id", "name", "description", "pointCodes", "isBuiltin", "createdAt", "updatedAt"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "pointCodes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "isBuiltin": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      }
+    }
+  }
+}

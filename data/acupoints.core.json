@@ -1,0 +1,1016 @@
+[
+  {
+    "code": "0",
+    "name": "Huyệt 0 (Khuyết bình tai)",
+    "region": "ears-jaw",
+    "regionLabel": "Tai & Hàm",
+    "laterality": "bilateral",
+    "gridRef": {
+      "vertical": "Sát trước khuyết dưới bình tai (ngoài tuyến L)",
+      "horizontal": "Tuyến ngang VII (ngang Huyệt 1, 61, 290)"
+    },
+    "howToLocate": "Nằm ngay rãnh trước khuyết dưới của nắp bình tai (nơi bờ dưới bình tai tiếp giáp da má), trên đường ngang VII.",
+    "indications": [
+      "Ổn định tổng thể cơ thể, điều hòa huyết áp",
+      "An thần, giảm đau đầu, ù tai",
+      "Cầm máu, giảm dị ứng, hỗ trợ thính lực",
+      "Thường dùng kết thúc phác đồ để khóa huyệt"
+    ],
+    "organReflection": "Tai, Thận & Thần kinh thực vật",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 196,
+        "y": 596
+      },
+      "side": {
+        "x": 638,
+        "y": 596
+      }
+    }
+  },
+  {
+    "code": "1",
+    "name": "Huyệt 1 (Giữa sống mũi)",
+    "region": "nose",
+    "regionLabel": "Mũi",
+    "laterality": "midline",
+    "gridRef": {
+      "vertical": "Tuyến O (Trục giữa mặt)",
+      "horizontal": "Tuyến ngang VII (ngang Huyệt 0, 290, 61)"
+    },
+    "howToLocate": "Trên trục giữa sống mũi (tuyến O), giao với tuyến ngang VII đi qua khuyết bình tai (Huyệt 0) và đầu nếp cánh mũi (Huyệt 61).",
+    "indications": [
+      "Hỗ trợ cột sống thắt lưng, đau lưng",
+      "Làm ấm cơ thể, nâng dương khí",
+      "Hỗ trợ giảm mệt mỏi, suy nhược, tụt huyết áp nhẹ",
+      "Thông mũi, hỗ trợ viêm mũi dị ứng"
+    ],
+    "organReflection": "Cột sống lưng & Phế",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 500,
+        "y": 596
+      },
+      "side": {
+        "x": 148,
+        "y": 596
+      }
+    }
+  },
+  {
+    "code": "7",
+    "name": "Huyệt 7 (Dưới lỗ mũi)",
+    "region": "mouth-chin",
+    "regionLabel": "Miệng & Cằm",
+    "laterality": "bilateral",
+    "gridRef": {
+      "vertical": "Tuyến A (Bờ rãnh nhân trung)",
+      "horizontal": "Tuyến ngang IX (ngang giữa nhân trung — Huyệt 63)"
+    },
+    "howToLocate": "Nằm hai bên Huyệt 63, giao điểm tuyến dọc A (dưới lỗ mũi) và tuyến ngang IX (giữa nhân trung).",
+    "indications": [
+      "Điều hòa đường huyết, hỗ trợ tụy tạng",
+      "Giảm đau răng, sưng lợi hàm trên",
+      "Hỗ trợ tiêu hóa, giảm đầy bụng, ăn uống kém",
+      "Hỗ trợ dị ứng, ngứa ngoài da"
+    ],
+    "organReflection": "Tụy & Vùng răng hàm trên",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 483,
+        "y": 726
+      }
+    }
+  },
+  {
+    "code": "14",
+    "name": "Huyệt 14 (Chân dái tai)",
+    "region": "ears-jaw",
+    "regionLabel": "Tai & Hàm",
+    "laterality": "bilateral",
+    "gridRef": {
+      "vertical": "Chỗ dái tai tiếp giáp đường hàm",
+      "horizontal": "Tuyến ngang VIII (ngang Huyệt 173, 37)"
+    },
+    "howToLocate": "Ngay điểm giao giữa bờ dưới dái tai và đường viền xương hàm dưới, nằm trên tuyến ngang VIII.",
+    "indications": [
+      "Giảm đau họng, viêm amidan, ho có đờm",
+      "Giảm cứng cổ vai gáy, đau mỏi khớp hàm",
+      "Hỗ trợ viêm tai giữa, ù tai",
+      "Hạ sốt, giảm sưng hạch vùng cổ"
+    ],
+    "organReflection": "Họng, Amidan & Tuyến giáp",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 216,
+        "y": 664
+      },
+      "side": {
+        "x": 638,
+        "y": 684
+      }
+    }
+  },
+  {
+    "code": "16",
+    "name": "Huyệt 16 (Đỉnh chân tai trước)",
+    "region": "ears-jaw",
+    "regionLabel": "Tai & Hàm",
+    "laterality": "bilateral",
+    "gridRef": {
+      "vertical": "Khe tiếp giáp vành tai trên và thái dương",
+      "horizontal": "Giữa tuyến ngang IV và V"
+    },
+    "howToLocate": "Tại điểm nối bờ trước trên của vành tai vào da vùng thái dương (ngang khoảng trên đường mắt một chút).",
+    "indications": [
+      "Tiêu viêm, giảm sưng đau cấp tính",
+      "Cầm máu, làm dịu vết bầm tím",
+      "Giảm đau đầu vùng thái dương, nhức nửa đầu",
+      "Hỗ trợ giảm đau nhức cơ xương khớp"
+    ],
+    "organReflection": "Thái dương & Hệ mạch vùng đầu",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 200,
+        "y": 468
+      },
+      "side": {
+        "x": 632,
+        "y": 486
+      }
+    }
+  },
+  {
+    "code": "19",
+    "name": "Huyệt 19 (Đỉnh nhân trung / Chân mũi)",
+    "region": "mouth-chin",
+    "regionLabel": "Miệng & Cằm",
+    "laterality": "midline",
+    "gridRef": {
+      "vertical": "Tuyến O (Trục giữa mặt)",
+      "horizontal": "Dưới tuyến VIII (Sát chân vách ngăn mũi)"
+    },
+    "howToLocate": "Nằm ngay điểm lõm sát chân vách ngăn mũi (đỉnh trên cùng của rãnh nhân trung).",
+    "indications": [
+      "Cấp cứu ngất xỉu, choáng váng, tụt huyết áp",
+      "Thông mũi nhanh, hỗ trợ viêm xoang, nghẹt mũi",
+      "Tăng cường sức đề kháng, làm ấm người",
+      "Hỗ trợ đau bụng lạnh, khó thở, co thắt phế quản"
+    ],
+    "organReflection": "Tim, Mũi & Hệ thần kinh giao cảm",
+    "cautions": [
+      "Huyệt làm tăng huyết áp — thận trọng hoặc tránh kích thích mạnh ở người cao huyết áp và phụ nữ đang mang thai."
+    ],
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 500,
+        "y": 696
+      },
+      "side": {
+        "x": 178,
+        "y": 696
+      }
+    }
+  },
+  {
+    "code": "26",
+    "name": "Huyệt 26 (Ấn đường)",
+    "region": "eyes",
+    "regionLabel": "Mắt & Mày",
+    "laterality": "midline",
+    "gridRef": {
+      "vertical": "Tuyến O (Trục giữa mặt)",
+      "horizontal": "Tuyến ngang IV (Ngang hai đầu lông mày)"
+    },
+    "howToLocate": "Giao điểm trục giữa O và tuyến ngang IV nối liền hai đầu lông mày.",
+    "indications": [
+      "An thần, giảm căng thẳng, hỗ trợ ngủ ngon",
+      "Giảm đau đầu vùng trán, nặng đầu",
+      "Hạ huyết áp nhẹ, điều hòa nhịp tim",
+      "Thông xoang trán, giảm nghẹt mũi, mỏi mắt"
+    ],
+    "organReflection": "Não bộ, Tuyến yên & Xoang trán",
+    "cautions": [
+      "Huyệt có xu hướng hạ huyết áp — thao tác nhẹ ở người đang tụt huyết áp hoặc hoa mắt chóng mặt."
+    ],
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 500,
+        "y": 432
+      }
+    }
+  },
+  {
+    "code": "34",
+    "name": "Huyệt 34 (Trên đầu mày)",
+    "region": "eyes",
+    "regionLabel": "Mắt & Mày",
+    "laterality": "bilateral",
+    "gridRef": {
+      "vertical": "Tuyến C (Đầu lông mày)",
+      "horizontal": "Ngay phía trên tuyến ngang IV"
+    },
+    "howToLocate": "Nằm ngay bờ trên của đầu lông mày (trên Huyệt 65 một chút, dọc theo tuyến C).",
+    "indications": [
+      "Thư giãn thần kinh, giảm stress, mất ngủ",
+      "Giảm đau nhức đầu, đau nửa đầu, căng mỏi mắt",
+      "Hỗ trợ điều trị liệt dây thần kinh VII ngoại biên",
+      "Giảm co cứng vùng vai gáy"
+    ],
+    "organReflection": "Cung mày, Thần kinh mắt & Vùng trán",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 444,
+        "y": 412
+      }
+    }
+  },
+  {
+    "code": "37",
+    "name": "Huyệt 37 (Tỳ — Chỉ bên Trái)",
+    "region": "cheeks",
+    "regionLabel": "Má",
+    "laterality": "left",
+    "gridRef": {
+      "vertical": "Tuyến G bên TRÁI (Giữa đồng tử mắt trái)",
+      "horizontal": "Tuyến ngang VIII (Ngang đầu mũi — Huyệt 173)"
+    },
+    "howToLocate": "CHỈ CÓ BÊN TRÁI NGƯỜI BỆNH (nửa phải sơ đồ). Giao điểm tuyến dọc G (giữa đồng tử trái) và tuyến ngang VIII.",
+    "indications": [
+      "Kiện tỳ, hỗ trợ tiêu hóa, ăn uống khó tiêu",
+      "Tăng sức đề kháng, hỗ trợ nâng tiểu cầu & miễn dịch",
+      "Tiêu viêm, giảm sưng đau, hỗ trợ tan bầm",
+      "Giảm mệt mỏi, suy nhược cơ thể, đầy hơi"
+    ],
+    "organReflection": "Tỳ / Lá lách (chỉ bên Trái người bệnh)",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 644,
+        "y": 664
+      }
+    }
+  },
+  {
+    "code": "38",
+    "name": "Huyệt 38 (Giữa rãnh mũi má)",
+    "region": "mouth-chin",
+    "regionLabel": "Miệng & Cằm",
+    "laterality": "bilateral",
+    "gridRef": {
+      "vertical": "Giữa tuyến E và G (Trên nếp nhăn mũi má)",
+      "horizontal": "Tuyến ngang IX (Ngang giữa nhân trung — Huyệt 63)"
+    },
+    "howToLocate": "Giao điểm của đường nếp nhăn mũi má (pháp lệnh) với tuyến ngang IX đi qua giữa nhân trung (Huyệt 63).",
+    "indications": [
+      "Kháng sinh nội sinh, hỗ trợ tiêu viêm sưng tấy",
+      "Giảm đau nhức răng, viêm họng, viêm khớp",
+      "Hỗ trợ điều hòa hệ miễn dịch",
+      "Giảm co thắt và đau nhức vùng lưng"
+    ],
+    "organReflection": "Hệ miễn dịch & Đại tràng",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 374,
+        "y": 726
+      },
+      "side": {
+        "x": 294,
+        "y": 726
+      }
+    }
+  },
+  {
+    "code": "39",
+    "name": "Huyệt 39 (Bao tử — Chỉ bên Trái)",
+    "region": "cheeks",
+    "regionLabel": "Má",
+    "laterality": "left",
+    "gridRef": {
+      "vertical": "Trên rãnh mũi má bên TRÁI (gần tuyến E)",
+      "horizontal": "Ngay dưới tuyến VIII (ngang chân cánh mũi)"
+    },
+    "howToLocate": "CHỈ CÓ BÊN TRÁI NGƯỜI BỆNH (nửa phải sơ đồ). Nằm trên rãnh mũi má trái, ngang mức chân cánh mũi / Huyệt 19.",
+    "indications": [
+      "Giảm đau dạ dày, trào ngược, ợ chua, đầy bụng",
+      "Hỗ trợ tiêu hóa thức ăn, kích thích ăn ngon",
+      "Giảm buồn nôn, say tàu xe",
+      "Hỗ trợ đau khớp gối vùng trước"
+    ],
+    "organReflection": "Dạ dày / Bao tử (chỉ bên Trái người bệnh)",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 594,
+        "y": 692
+      },
+      "side": {
+        "x": 284,
+        "y": 686
+      }
+    }
+  },
+  {
+    "code": "41",
+    "name": "Huyệt 41 (Mật — Chỉ bên Phải)",
+    "region": "cheeks",
+    "regionLabel": "Má",
+    "laterality": "right",
+    "gridRef": {
+      "vertical": "Tuyến H bên PHẢI (Bờ ngoài tròng đen mắt phải)",
+      "horizontal": "Ngay dưới tuyến VIII (ngang Huyệt 50)"
+    },
+    "howToLocate": "CHỈ CÓ BÊN PHẢI NGƯỜI BỆNH (nửa trái sơ đồ). Nằm trên tuyến dọc H (bờ ngoài tròng đen phải), ngang hàng bên ngoài Huyệt 50.",
+    "indications": [
+      "Hỗ trợ tiêu hóa dầu mỡ, đầy trướng hạ sườn phải",
+      "Tiêu viêm, giải độc, làm dịu kích ứng ngoài da",
+      "Giảm đau nhức đầu một bên, đắng miệng",
+      "Hỗ trợ tan sỏi mật, điều hòa tiết mật"
+    ],
+    "organReflection": "Túi mật (chỉ bên Phải người bệnh)",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 320,
+        "y": 690
+      }
+    }
+  },
+  {
+    "code": "43",
+    "name": "Huyệt 43 (Sống mũi dưới)",
+    "region": "nose",
+    "regionLabel": "Mũi",
+    "laterality": "midline",
+    "gridRef": {
+      "vertical": "Tuyến O (Trục giữa mặt)",
+      "horizontal": "Giữa tuyến VII (Huyệt 1) và VIII (Huyệt 173)"
+    },
+    "howToLocate": "Trên trục giữa sống mũi (tuyến O), nằm khoảng giữa Huyệt 1 và đầu chóp mũi (Huyệt 173).",
+    "indications": [
+      "Hỗ trợ cột sống thắt lưng – cùng",
+      "Làm ấm cơ thể, hành khí",
+      "Thông mũi, giảm sung huyết mũi",
+      "Ổn định tim phổi"
+    ],
+    "organReflection": "Cột sống thắt lưng & Tim",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 500,
+        "y": 628
+      }
+    }
+  },
+  {
+    "code": "45",
+    "name": "Huyệt 45 (Cạnh sống mũi dưới)",
+    "region": "nose",
+    "regionLabel": "Mũi",
+    "laterality": "bilateral",
+    "gridRef": {
+      "vertical": "Tuyến A (Hai bên trục sống mũi)",
+      "horizontal": "Ngang Huyệt 43 (giữa tuyến VII và VIII)"
+    },
+    "howToLocate": "Nằm trên tuyến A ngay hai bên sườn sống mũi, ngang hàng với Huyệt 43.",
+    "indications": [
+      "Hỗ trợ thận, đau mỏi vùng thắt lưng hai bên",
+      "Hỗ trợ thông mũi, giảm viêm mũi dị ứng",
+      "Làm ấm bàn tay, bàn chân lạnh",
+      "Hỗ trợ giảm đau thần kinh tọa"
+    ],
+    "organReflection": "Thận & Cơ cạnh sống lưng",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 483,
+        "y": 628
+      }
+    }
+  },
+  {
+    "code": "50",
+    "name": "Huyệt 50 (Gan — Chỉ bên Phải)",
+    "region": "cheeks",
+    "regionLabel": "Má",
+    "laterality": "right",
+    "gridRef": {
+      "vertical": "Tuyến G bên PHẢI (Giữa đồng tử mắt phải)",
+      "horizontal": "Ngay dưới tuyến VIII (ngang chân cánh mũi)"
+    },
+    "howToLocate": "CHỈ CÓ BÊN PHẢI NGƯỜI BỆNH (nửa trái sơ đồ). Giao điểm tuyến dọc G (giữa đồng tử phải) và đường ngang chân cánh mũi.",
+    "indications": [
+      "Hỗ trợ chức năng gan, thanh nhiệt giải độc",
+      "Cải thiện tiêu hóa, giảm đầy hơi, chán ăn",
+      "Tăng sức đề kháng, giảm dị ứng, mẩn ngứa",
+      "Giảm mỏi mắt, hoa mắt và căng thẳng cơ bắp"
+    ],
+    "organReflection": "Gan (chỉ bên Phải người bệnh)",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 356,
+        "y": 690
+      }
+    }
+  },
+  {
+    "code": "60",
+    "name": "Huyệt 60 (Gò má ngoài)",
+    "region": "cheeks",
+    "regionLabel": "Má",
+    "laterality": "bilateral",
+    "gridRef": {
+      "vertical": "Tuyến K (Thẳng đuôi mắt ngoài xuống)",
+      "horizontal": "Tuyến ngang VI (Bờ dưới hốc mắt)"
+    },
+    "howToLocate": "Giao điểm tuyến dọc K (đuôi mắt ngoài) và tuyến ngang VI trên xương gò má ngoài.",
+    "indications": [
+      "Điều hòa nhịp tim, giảm hồi hộp đánh trống ngực",
+      "Giảm đau nhức vùng vai, cánh tay và cổ gáy",
+      "Hỗ trợ lưu thông khí huyết vùng ngực",
+      "Giảm căng thẳng, dễ thở"
+    ],
+    "organReflection": "Tim & Khớp vai",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 284,
+        "y": 540
+      },
+      "side": {
+        "x": 412,
+        "y": 540
+      }
+    }
+  },
+  {
+    "code": "61",
+    "name": "Huyệt 61 (Đỉnh rãnh cánh mũi)",
+    "region": "nose",
+    "regionLabel": "Mũi",
+    "laterality": "bilateral",
+    "gridRef": {
+      "vertical": "Tuyến C (Bờ ngoài cánh mũi)",
+      "horizontal": "Tuyến ngang VII (Đỉnh nếp nhăn mũi má)"
+    },
+    "howToLocate": "Điểm lõm ngay đỉnh trên cùng của rãnh cánh mũi (nơi bắt đầu đường pháp lệnh), giao giữa tuyến C và tuyến VII.",
+    "indications": [
+      "Thông mũi nhanh, giảm nghẹt mũi, sổ mũi",
+      "Hỗ trợ điều trị viêm xoang, viêm mũi dị ứng",
+      "Tiêu viêm, giảm đau đầu và cắt cơn đau cấp",
+      "Hỗ trợ dễ thở"
+    ],
+    "organReflection": "Xoang hàm, Phổi & Khí quản",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 444,
+        "y": 602
+      },
+      "side": {
+        "x": 240,
+        "y": 596
+      }
+    }
+  },
+  {
+    "code": "63",
+    "name": "Huyệt 63 (Giữa nhân trung)",
+    "region": "mouth-chin",
+    "regionLabel": "Miệng & Cằm",
+    "laterality": "midline",
+    "gridRef": {
+      "vertical": "Tuyến O (Trục giữa mặt)",
+      "horizontal": "Tuyến ngang IX (Chính giữa rãnh nhân trung)"
+    },
+    "howToLocate": "Giao điểm trục giữa O và tuyến ngang IX tại chính giữa rãnh nhân trung.",
+    "indications": [
+      "Cấp cứu ngất xỉu, làm tỉnh táo tinh thần",
+      "Điều hòa tử cung, hỗ trợ đau bụng kinh",
+      "Làm ấm người, giảm đau thắt lưng cấp",
+      "Hỗ trợ cải thiện tuần hoàn vùng chậu"
+    ],
+    "organReflection": "Tử cung, Bàng quang & Thắt lưng",
+    "cautions": [
+      "Thận trọng khi kích thích mạnh ở phụ nữ có thai."
+    ],
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 500,
+        "y": 726
+      },
+      "side": {
+        "x": 180,
+        "y": 726
+      }
+    }
+  },
+  {
+    "code": "65",
+    "name": "Huyệt 65 (Đầu lông mày)",
+    "region": "eyes",
+    "regionLabel": "Mắt & Mày",
+    "laterality": "bilateral",
+    "gridRef": {
+      "vertical": "Tuyến C (Đầu trong lông mày)",
+      "horizontal": "Tuyến ngang IV (Ngang Ấn đường)"
+    },
+    "howToLocate": "Nằm ngay điểm đầu trong cùng của lông mày, giao điểm tuyến C và tuyến ngang IV.",
+    "indications": [
+      "Giảm đau nhức đầu, nặng vùng chân mày",
+      "Giảm mỏi mắt, khô mắt, mờ mắt",
+      "Thư giãn cơ cổ vai gáy",
+      "Hỗ trợ thông xoang trán"
+    ],
+    "organReflection": "Mắt, Xoang trán & Vùng vai gáy",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 444,
+        "y": 432
+      },
+      "side": {
+        "x": 222,
+        "y": 432
+      }
+    }
+  },
+  {
+    "code": "73",
+    "name": "Huyệt 73 (Bờ dưới hốc mắt)",
+    "region": "eyes",
+    "regionLabel": "Mắt & Mày",
+    "laterality": "bilateral",
+    "gridRef": {
+      "vertical": "Tuyến G (Chính giữa đồng tử mắt)",
+      "horizontal": "Tuyến ngang VI (Gờ xương bờ dưới hốc mắt)"
+    },
+    "howToLocate": "Nhìn thẳng, giao điểm tuyến dọc G (giữa con ngươi) và tuyến ngang VI ngay bờ xương dưới hốc mắt.",
+    "indications": [
+      "Giảm mỏi mắt, sụp mí, bọng mắt, quầng thâm",
+      "Thông xoang hàm, giảm nặng gò má",
+      "Giảm đau mỏi vai gáy và tê vùng cánh tay",
+      "Hỗ trợ tiêu hóa và điều hòa vùng ngực"
+    ],
+    "organReflection": "Hốc mắt, Xoang hàm & Tuyến sinh dục",
+    "cautions": [
+      "Vùng da quanh mắt mỏng — ấn nhẹ vừa phải bằng đầu que dò tù, tránh trượt vào nhãn cầu."
+    ],
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 356,
+        "y": 540
+      }
+    }
+  },
+  {
+    "code": "87",
+    "name": "Huyệt 87 (Đỉnh ụ cằm)",
+    "region": "mouth-chin",
+    "regionLabel": "Miệng & Cằm",
+    "laterality": "midline",
+    "gridRef": {
+      "vertical": "Tuyến O (Trục giữa mặt)",
+      "horizontal": "Tuyến ngang XII (Giữa ụ cằm)"
+    },
+    "howToLocate": "Giao điểm trục giữa O và tuyến ngang XII tại phần nhô tròn của ụ cằm.",
+    "indications": [
+      "Hỗ trợ bàng quang, giảm tiểu đêm, tiểu rắt",
+      "Làm ấm vùng bụng dưới và bàn chân",
+      "Hỗ trợ giảm đau vùng xương cụt, mông",
+      "Ổn định hạ tiêu"
+    ],
+    "organReflection": "Bàng quang & Xương cụt",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 500,
+        "y": 918
+      },
+      "side": {
+        "x": 200,
+        "y": 918
+      }
+    }
+  },
+  {
+    "code": "103",
+    "name": "Huyệt 103 (Chính giữa trán)",
+    "region": "forehead",
+    "regionLabel": "Trán",
+    "laterality": "midline",
+    "gridRef": {
+      "vertical": "Tuyến O (Trục giữa mặt)",
+      "horizontal": "Tuyến ngang II (Chính giữa chiều cao trán)"
+    },
+    "howToLocate": "Giao điểm trục giữa O và tuyến ngang II (trung điểm đoạn nối Huyệt 126 chân tóc và Huyệt 26 Ấn đường).",
+    "indications": [
+      "Tăng cường trí nhớ, giúp tỉnh táo, giảm căng thẳng trí óc",
+      "Giảm đau đỉnh đầu, chóng mặt, rối loạn tiền đình",
+      "Hỗ trợ giấc ngủ sâu, giảm suy nghĩ miên man",
+      "Điều hòa thần kinh trung ương"
+    ],
+    "organReflection": "Vỏ não & Đỉnh đầu",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 500,
+        "y": 316
+      },
+      "side": {
+        "x": 220,
+        "y": 316
+      }
+    }
+  },
+  {
+    "code": "106",
+    "name": "Huyệt 106 (Trán dưới)",
+    "region": "forehead",
+    "regionLabel": "Trán",
+    "laterality": "midline",
+    "gridRef": {
+      "vertical": "Tuyến O (Trục giữa mặt)",
+      "horizontal": "Tuyến ngang III (Trung điểm giữa 103 và 26)"
+    },
+    "howToLocate": "Giao điểm trục giữa O và tuyến ngang III (chính giữa đoạn từ Huyệt 103 xuống Huyệt 26).",
+    "indications": [
+      "Thông xoang trán, giảm đau nặng vùng giữa trán",
+      "An thần, giảm lo âu, hỗ trợ ngủ ngon",
+      "Giảm đau cứng vùng cổ gáy",
+      "Hỗ trợ điều hòa nhịp tim và hô hấp"
+    ],
+    "organReflection": "Xoang trán, Đốt sống cổ & Hầu họng",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 500,
+        "y": 374
+      },
+      "side": {
+        "x": 216,
+        "y": 374
+      }
+    }
+  },
+  {
+    "code": "124",
+    "name": "Huyệt 124 (An thần trán)",
+    "region": "forehead",
+    "regionLabel": "Trán",
+    "laterality": "bilateral",
+    "gridRef": {
+      "vertical": "Tuyến H (Thẳng bờ ngoài tròng đen lên trán)",
+      "horizontal": "Tuyến ngang II (Ngang Huyệt 103)"
+    },
+    "howToLocate": "Giao điểm tuyến ngang II (ngang giữa trán 103) và tuyến dọc H (bờ ngoài tròng đen mắt gióng lên).",
+    "indications": [
+      "An thần chủ lực, hỗ trợ mất ngủ kinh niên, khó vào giấc",
+      "Giảm căng thẳng thần kinh, stress, hay quên",
+      "Giảm đau đầu, đau nửa đầu vùng thái dương",
+      "Hỗ trợ ổn định huyết áp do căng thẳng"
+    ],
+    "organReflection": "Hệ thần kinh trung ương & Vùng thái dương",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 320,
+        "y": 316
+      }
+    }
+  },
+  {
+    "code": "126",
+    "name": "Huyệt 126 (Giữa chân tóc trán)",
+    "region": "forehead",
+    "regionLabel": "Trán",
+    "laterality": "midline",
+    "gridRef": {
+      "vertical": "Tuyến O (Trục giữa mặt)",
+      "horizontal": "Tuyến ngang 0 (Mép đường chân tóc trán)"
+    },
+    "howToLocate": "Giao điểm trục giữa O và tuyến ngang 0 ngay mép chân tóc giữa trán.",
+    "indications": [
+      "Giảm đau đỉnh đầu, nặng đầu",
+      "Hỗ trợ giấc ngủ, thư giãn hệ thần kinh",
+      "Hạ sốt nhẹ, giải cảm vùng đầu mặt",
+      "Nâng khí, hỗ trợ vùng cột sống cổ – đầu"
+    ],
+    "organReflection": "Đỉnh đầu (Bách hội phản chiếu)",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 500,
+        "y": 196
+      },
+      "side": {
+        "x": 278,
+        "y": 196
+      }
+    }
+  },
+  {
+    "code": "127",
+    "name": "Huyệt 127 (Hõm cằm)",
+    "region": "mouth-chin",
+    "regionLabel": "Miệng & Cằm",
+    "laterality": "midline",
+    "gridRef": {
+      "vertical": "Tuyến O (Trục giữa mặt)",
+      "horizontal": "Tuyến ngang XI (Chính giữa hõm rãnh môi — cằm)"
+    },
+    "howToLocate": "Giao điểm trục giữa O và tuyến ngang XI tại chỗ lõm sâu nhất dưới môi dưới.",
+    "indications": [
+      "Làm ấm cơ thể, bổ khí huyết, tăng sức đề kháng",
+      "Ổn định huyết áp, giảm choáng mệt",
+      "Hỗ trợ tiêu hóa, giảm đau bụng lạnh, tiêu chảy",
+      "Giảm đau bụng kinh, thư giãn vùng bụng dưới"
+    ],
+    "organReflection": "Ruột non, Khí hải & Vùng bụng dưới",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 500,
+        "y": 858
+      },
+      "side": {
+        "x": 216,
+        "y": 858
+      }
+    }
+  },
+  {
+    "code": "130",
+    "name": "Huyệt 130 (Ngoài đuôi mắt)",
+    "region": "eyes",
+    "regionLabel": "Mắt & Mày",
+    "laterality": "bilateral",
+    "gridRef": {
+      "vertical": "Tuyến L (Gờ xương ngoài hốc mắt)",
+      "horizontal": "Tuyến ngang V (Đường ngang giữa mắt)"
+    },
+    "howToLocate": "Giao điểm tuyến dọc L và tuyến ngang V, tại hõm sát bờ ngoài gờ xương hốc mắt.",
+    "indications": [
+      "Giảm đau mỏi cổ vai gáy, vẹo cổ cấp",
+      "Giảm mỏi mắt, nhức thái dương, đau nửa đầu",
+      "Thư giãn cơ vùng bả vai, cánh tay",
+      "Hỗ trợ giảm khô mỏi mắt"
+    ],
+    "organReflection": "Khớp cổ, Khớp vai & Mắt",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 248,
+        "y": 486
+      },
+      "side": {
+        "x": 412,
+        "y": 486
+      }
+    }
+  },
+  {
+    "code": "143",
+    "name": "Huyệt 143 (Mặt dưới chóp mũi)",
+    "region": "nose",
+    "regionLabel": "Mũi",
+    "laterality": "midline",
+    "gridRef": {
+      "vertical": "Tuyến O (Trục giữa mặt)",
+      "horizontal": "Mặt dưới đầu mũi (giữa Huyệt 173 và 19)"
+    },
+    "howToLocate": "Ngửa nhẹ đầu mũi: nằm ở mặt dưới chóp mũi trên vách ngăn giữa hai lỗ mũi, chính giữa đoạn nối Huyệt 173 và Huyệt 19.",
+    "indications": [
+      "Hạ sốt nhanh, thanh nhiệt, giải độc",
+      "Tiêu viêm, giảm ngứa, chống dị ứng",
+      "Hỗ trợ nhuận tràng, giảm táo bón",
+      "Thông thoáng vùng trực tràng – hậu môn"
+    ],
+    "organReflection": "Trực tràng, Hậu môn & Điều nhiệt",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 500,
+        "y": 680
+      },
+      "side": {
+        "x": 128,
+        "y": 684
+      }
+    }
+  },
+  {
+    "code": "156",
+    "name": "Huyệt 156 (Cạnh ụ cằm)",
+    "region": "mouth-chin",
+    "regionLabel": "Miệng & Cằm",
+    "laterality": "bilateral",
+    "gridRef": {
+      "vertical": "Tuyến D (Khóe mắt trong gióng xuống cằm)",
+      "horizontal": "Ngay dưới tuyến XI (Đường viền cong bên ụ cằm)"
+    },
+    "howToLocate": "Nằm trên đường cong hai bên ụ cằm, giao với tuyến dọc D (hơi thấp hơn Huyệt 127 một chút).",
+    "indications": [
+      "Giảm đau mỏi đầu gối, tê nhức chân và bàn chân",
+      "Hạ sốt, thông kinh lạc chi dưới",
+      "Hỗ trợ tiêu viêm vùng khớp chân",
+      "Giảm đau thần kinh tọa"
+    ],
+    "organReflection": "Đầu gối & Cẳng chân",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 422,
+        "y": 876
+      }
+    }
+  },
+  {
+    "code": "173",
+    "name": "Huyệt 173 (Đỉnh chóp mũi dưới)",
+    "region": "nose",
+    "regionLabel": "Mũi",
+    "laterality": "midline",
+    "gridRef": {
+      "vertical": "Tuyến O (Trục giữa mặt)",
+      "horizontal": "Tuyến ngang VIII (Đầu chóp mũi)"
+    },
+    "howToLocate": "Giao điểm trục giữa O và tuyến ngang VIII ngay tại đỉnh tròn dưới của đầu chóp mũi.",
+    "indications": [
+      "Hạ sốt nhẹ, điều hòa thân nhiệt",
+      "Hỗ trợ thông mũi và tiêu hóa",
+      "Giảm đau vùng cột sống cùng – cụt",
+      "Ổn định khí huyết"
+    ],
+    "organReflection": "Đốt sống cùng & Hô hấp",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 500,
+        "y": 664
+      },
+      "side": {
+        "x": 118,
+        "y": 664
+      }
+    }
+  },
+  {
+    "code": "189",
+    "name": "Huyệt 189 (Sống mũi trên)",
+    "region": "nose",
+    "regionLabel": "Mũi",
+    "laterality": "midline",
+    "gridRef": {
+      "vertical": "Tuyến O (Trục giữa mặt)",
+      "horizontal": "Tuyến ngang VI (Ngang bờ dưới hốc mắt — Huyệt 73)"
+    },
+    "howToLocate": "Giao điểm trục giữa sống mũi O và tuyến ngang VI (ngang hàng với hai Huyệt 73).",
+    "indications": [
+      "Thông mũi, giảm nghẹt mũi, viêm mũi dị ứng, viêm xoang",
+      "Giảm mỏi mắt, khô mắt",
+      "Hỗ trợ đau vùng lưng trên, bả vai",
+      "Làm thông thoáng phế khí"
+    ],
+    "organReflection": "Xoang sàng, Phổi & Cột sống ngực",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 500,
+        "y": 540
+      },
+      "side": {
+        "x": 194,
+        "y": 540
+      }
+    }
+  },
+  {
+    "code": "222",
+    "name": "Huyệt 222 (Ngang khóe miệng ngoài)",
+    "region": "mouth-chin",
+    "regionLabel": "Miệng & Cằm",
+    "laterality": "bilateral",
+    "gridRef": {
+      "vertical": "Tuyến G (Giữa đồng tử mắt gióng xuống)",
+      "horizontal": "Tuyến ngang X (Đường kẽ miệng)"
+    },
+    "howToLocate": "Giao điểm tuyến dọc G (giữa đồng tử mắt kéo xuống) và tuyến ngang X (đường ngang qua khóe miệng).",
+    "indications": [
+      "Chống mệt mỏi, nâng thể lực",
+      "Giảm đau nhức vùng hông, đùi và khớp gối",
+      "Hỗ trợ tiêu hóa và tiết niệu",
+      "Thư giãn cơ hàm dưới"
+    ],
+    "organReflection": "Khớp háng, Đùi & Thắt lưng",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 356,
+        "y": 790
+      },
+      "side": {
+        "x": 306,
+        "y": 790
+      }
+    }
+  },
+  {
+    "code": "275",
+    "name": "Huyệt 275 (Trước vành tai trên)",
+    "region": "ears-jaw",
+    "regionLabel": "Tai & Hàm",
+    "laterality": "bilateral",
+    "gridRef": {
+      "vertical": "Bờ trước tai (ngoài tuyến L)",
+      "horizontal": "Tuyến ngang VI (Giữa Huyệt 16 và Huyệt 0)"
+    },
+    "howToLocate": "Nằm sát bờ trước tai trên, ngang tuyến VI (khoảng giữa từ Huyệt 16 xuống Huyệt 0).",
+    "indications": [
+      "Giảm đau cứng cổ gáy, thoái hóa đốt sống cổ",
+      "Giảm đau khớp thái dương hàm, ù tai",
+      "Giảm đau nhức vai và tê mỏi bả vai",
+      "Hỗ trợ viêm họng"
+    ],
+    "organReflection": "Cột sống cổ & Khớp thái dương hàm",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 204,
+        "y": 540
+      },
+      "side": {
+        "x": 588,
+        "y": 682
+      }
+    }
+  },
+  {
+    "code": "290",
+    "name": "Huyệt 290 (Cạnh sống mũi — Tuyến VII)",
+    "region": "nose",
+    "regionLabel": "Mũi",
+    "laterality": "bilateral",
+    "gridRef": {
+      "vertical": "Tuyến B (Giữa Huyệt 1 và Huyệt 61)",
+      "horizontal": "Tuyến ngang VII (Ngang Huyệt 1 và 0)"
+    },
+    "howToLocate": "Giao điểm tuyến dọc B và tuyến ngang VII trên sườn mũi, nằm ngay giữa Huyệt 1 và Huyệt 61.",
+    "indications": [
+      "Giải độc, tiêu viêm, bổ thận",
+      "Hỗ trợ tiểu tiện, giảm tiểu đêm",
+      "Thông thoáng mũi khi nghẹt mũi",
+      "Làm ấm cơ thể"
+    ],
+    "organReflection": "Thận & Đường tiết niệu",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 466,
+        "y": 596
+      },
+      "side": {
+        "x": 172,
+        "y": 596
+      }
+    }
+  },
+  {
+    "code": "300",
+    "name": "Huyệt 300 (Trán trên — Bổ thận)",
+    "region": "forehead",
+    "regionLabel": "Trán",
+    "laterality": "bilateral",
+    "gridRef": {
+      "vertical": "Tuyến E (Bờ trong tròng đen gióng lên trán)",
+      "horizontal": "Tuyến ngang I (1/4 trên của trán)"
+    },
+    "howToLocate": "Giao điểm tuyến dọc E và tuyến ngang I (trung điểm chiều cao từ giữa trán II lên chân tóc 0).",
+    "indications": [
+      "Bổ thận dương, tăng cường sinh lực và sức đề kháng",
+      "Giảm đau mỏi thắt lưng, yếu gối",
+      "Hỗ trợ cải thiện giấc ngủ, giảm tiểu đêm",
+      "Làm ấm cơ thể và ổn định thần kinh"
+    ],
+    "organReflection": "Thận & Thượng thận",
+    "verificationStatus": "core-reference",
+    "views": {
+      "front": {
+        "x": 392,
+        "y": 256
+      }
+    }
+  }
+]

@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Be Vietnam Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --color-paper: #F5F3EE;
+  --color-card: #FFFFFF;
+  --color-ink: #1A2229;
+  --color-ink-muted: #5B6770;
+  --color-accent: #C84B31;
+  --color-jade: #1E6F64;
+  --color-amber-warn: #B45309;
+  --color-hairline: #E2DDD3;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+    font-family: var(--font-sans);
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+  }
+}
+
+.map-studio-canvas {
+  background-color: #FFFFFF;
+}
+
+@keyframes acupoint-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.78;
+  }
+  50% {
+    transform: scale(1.38);
+    opacity: 0.25;
+  }
+}
+
+.acupoint-pulse-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: acupoint-pulse 2s ease-in-out infinite;
+}
+
+/* Custom sleek scrollbars for clinical sidebars */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #D5CFC2;
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #B9B1A1;
+}

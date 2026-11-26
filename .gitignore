@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Production build
+dist/
+dist-ssr/
+
+# TypeScript incremental build info
+*.tsbuildinfo
+
+# Logs & OS files
+*.log
+.DS_Store
+.env
+.env.*
+!.env.example

@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   BookOpen,
-  ChevronDown,
   Info,
   Layers,
   Search,
@@ -68,7 +67,44 @@ export function App() {
   // Mobile sheet & Info popover states
   const [mobileSheet, setMobileSheet] = React.useState<MobileSheetMode>('closed');
   const [mobileSheetExpanded, setMobileSheetExpanded] = React.useState(false);
+  const [sheetDragY, setSheetDragY] = React.useState(0);
+  const sheetDragStartYRef = React.useRef<number | null>(null);
   const [showInfoPopover, setShowInfoPopover] = React.useState(false);
+
+  const closeMobileSheet = React.useCallback(() => {
+    setMobileSheet('closed');
+    setMobileSheetExpanded(false);
+    setSheetDragY(0);
+  }, []);
+
+  const handleSheetTouchStart = React.useCallback((e: React.TouchEvent) => {
+    sheetDragStartYRef.current = e.touches[0].clientY;
+    setSheetDragY(0);
+  }, []);
+
+  const handleSheetTouchMove = React.useCallback((e: React.TouchEvent) => {
+    if (sheetDragStartYRef.current === null) return;
+    const dy = e.touches[0].clientY - sheetDragStartYRef.current;
+    // Allow smooth downward visual drag feedback
+    setSheetDragY(Math.max(-40, dy));
+  }, []);
+
+  const handleSheetTouchEnd = React.useCallback(() => {
+    if (sheetDragStartYRef.current === null) return;
+    const dy = sheetDragY;
+    sheetDragStartYRef.current = null;
+    setSheetDragY(0);
+
+    if (dy > 55) {
+      if (mobileSheetExpanded && dy < 140) {
+        setMobileSheetExpanded(false);
+      } else {
+        closeMobileSheet();
+      }
+    } else if (dy < -45) {
+      setMobileSheetExpanded(true);
+    }
+  }, [sheetDragY, mobileSheetExpanded, closeMobileSheet]);
 
   // Derived data
   const markers = React.useMemo(
@@ -451,7 +487,7 @@ export function App() {
             onHoverMarker={setHoveredCode}
             onClearSelection={() => {
               setSelectedCode(null);
-              if (mobileSheet === 'detail') setMobileSheet('closed');
+              if (mobileSheet !== 'closed') closeMobileSheet();
             }}
             onScaleChange={setMapScale}
           />
@@ -521,83 +557,101 @@ export function App() {
           </aside>
         )}
 
-        {/* Mobile Bottom Drawer (explicit height + flex min-h-0 so inner content scrolls reliably on iOS/Android) */}
+        {/* Mobile Tap-Outside Scrim for Search & Collections Sheets */}
+        {(mobileSheet === 'search' || mobileSheet === 'collections') && (
+          <div
+            onClick={closeMobileSheet}
+            aria-hidden="true"
+            className="fixed inset-0 z-30 bg-black/20 backdrop-blur-[1px] lg:hidden"
+          />
+        )}
+
+        {/* Mobile Bottom Drawer (swipe-down to close + tap-outside scrim + clear X button) */}
         {mobileSheet !== 'closed' && (
           <div
-            style={{ touchAction: 'pan-y' }}
-            className={`fixed inset-x-0 bottom-0 z-40 flex flex-col rounded-t-3xl border-t border-[#DED8CC] bg-white pb-[env(safe-area-inset-bottom)] shadow-2xl transition-[height] duration-200 lg:hidden ${
-              mobileSheetExpanded ? 'h-[82dvh]' : 'h-[58dvh]'
-            }`}
+            style={{
+              touchAction: 'pan-y',
+              transform: sheetDragY > 0 ? `translateY(${sheetDragY}px)` : undefined,
+            }}
+            className={`fixed inset-x-0 bottom-0 z-40 flex flex-col rounded-t-3xl border-t border-[#DED8CC] bg-white pb-[env(safe-area-inset-bottom)] shadow-2xl lg:hidden ${
+              sheetDragY === 0 ? 'transition-[height,transform] duration-200' : ''
+            } ${mobileSheetExpanded ? 'h-[82dvh]' : 'h-[58dvh]'}`}
           >
-            {/* Drawer Drag Handle */}
-            <button
-              type="button"
-              onClick={() => setMobileSheetExpanded((v) => !v)}
-              aria-label={mobileSheetExpanded ? 'Thu gọn chiều cao bảng' : 'Mở rộng chiều cao bảng'}
-              className="flex w-full shrink-0 items-center justify-center pt-2 pb-1"
+            {/* Swipeable Handle + Header Area */}
+            <div
+              onTouchStart={handleSheetTouchStart}
+              onTouchMove={handleSheetTouchMove}
+              onTouchEnd={handleSheetTouchEnd}
+              className="shrink-0 select-none"
+              style={{ touchAction: 'none' }}
             >
-              <span className="h-1 w-10 rounded-full bg-[#D5CFC2]" />
-            </button>
+              {/* Drawer Drag Handle */}
+              <button
+                type="button"
+                onClick={() => setMobileSheetExpanded((v) => !v)}
+                aria-label={mobileSheetExpanded ? 'Thu gọn chiều cao bảng' : 'Mở rộng chiều cao bảng'}
+                className="flex w-full items-center justify-center pt-2.5 pb-1.5"
+              >
+                <span className="h-1.5 w-11 rounded-full bg-[#CFC8BA]" />
+              </button>
 
-            {/* Drawer Header */}
-            <div className="flex shrink-0 items-center justify-between border-b border-[#EFECE4] px-4 py-2">
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={() => setMobileSheet('search')}
-                  className={`rounded-lg px-2.5 py-1.5 text-xs font-semibold ${
-                    mobileSheet === 'search'
-                      ? 'bg-[#1A2229] text-white'
-                      : 'text-[#5B6770]'
-                  }`}
-                >
-                  Tra cứu
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMobileSheet('collections')}
-                  className={`rounded-lg px-2.5 py-1.5 text-xs font-semibold ${
-                    mobileSheet === 'collections'
-                      ? 'bg-[#1A2229] text-white'
-                      : 'text-[#5B6770]'
-                  }`}
-                >
-                  Bộ huyệt
-                </button>
-                {selectedPoint && (
+              {/* Drawer Header */}
+              <div className="flex items-center justify-between border-b border-[#EFECE4] px-3.5 pb-2.5">
+                <div className="flex items-center gap-1.5">
                   <button
                     type="button"
-                    onClick={() => setMobileSheet('detail')}
+                    onClick={() => setMobileSheet('search')}
                     className={`rounded-lg px-2.5 py-1.5 text-xs font-semibold ${
-                      mobileSheet === 'detail'
-                        ? 'bg-[#C84B31] text-white'
-                        : 'text-[#C84B31]'
+                      mobileSheet === 'search'
+                        ? 'bg-[#1A2229] text-white'
+                        : 'text-[#5B6770]'
                     }`}
                   >
-                    Huyệt {selectedPoint.code}
+                    Tra cứu
                   </button>
-                )}
-              </div>
+                  <button
+                    type="button"
+                    onClick={() => setMobileSheet('collections')}
+                    className={`rounded-lg px-2.5 py-1.5 text-xs font-semibold ${
+                      mobileSheet === 'collections'
+                        ? 'bg-[#1A2229] text-white'
+                        : 'text-[#5B6770]'
+                    }`}
+                  >
+                    Bộ huyệt
+                  </button>
+                  {selectedPoint && (
+                    <button
+                      type="button"
+                      onClick={() => setMobileSheet('detail')}
+                      className={`rounded-lg px-2.5 py-1.5 text-xs font-semibold ${
+                        mobileSheet === 'detail'
+                          ? 'bg-[#C84B31] text-white'
+                          : 'text-[#C84B31]'
+                      }`}
+                    >
+                      Huyệt {selectedPoint.code}
+                    </button>
+                  )}
+                </div>
 
-              <div className="flex items-center gap-1">
-                <button
-                  type="button"
-                  onClick={() => setMobileSheetExpanded((v) => !v)}
-                  className="rounded-lg px-2 py-1 text-[11px] font-semibold text-[#5B6770] hover:bg-[#F5F3EE]"
-                >
-                  {mobileSheetExpanded ? 'Thu nhỏ' : 'Mở rộng'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileSheet('closed');
-                    setMobileSheetExpanded(false);
-                  }}
-                  aria-label="Đóng bảng dưới"
-                  className="rounded-lg p-1.5 text-[#5B6770] hover:bg-[#F5F3EE]"
-                >
-                  <ChevronDown className="h-4 w-4" />
-                </button>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setMobileSheetExpanded((v) => !v)}
+                    className="rounded-lg border border-[#E2DDD3] px-2.5 py-1.5 text-[11px] font-semibold text-[#5B6770] active:bg-[#F5F3EE]"
+                  >
+                    {mobileSheetExpanded ? 'Thu nhỏ' : 'Mở rộng'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={closeMobileSheet}
+                    aria-label="Đóng bảng dưới"
+                    className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#F0ECE4] text-[#1A2229] transition active:bg-[#1A2229] active:text-white"
+                  >
+                    <X className="h-4.5 w-4.5 stroke-[2.4]" />
+                  </button>
+                </div>
               </div>
             </div>
 

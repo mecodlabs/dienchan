@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { BUILTIN_PROTOCOLS, CORE_ACUPOINTS, GRID_LINES } from '@/data/acupointRepository';
+import {
+  ALL_ACUPOINTS,
+  BUILTIN_PROTOCOLS,
+  CORE_ACUPOINTS,
+  GRID_LINES,
+} from '@/data/acupointRepository';
 import { parseImportedCollectionsJson } from '@/data/collectionStorage';
 import { getFocusTarget, MAP_WIDTH, projectAcupointsForView } from '@/domain/projection';
 import { normalizeVietnamese, searchAcupoints } from '@/domain/search';
@@ -41,9 +46,11 @@ describe('Vietnamese accent-insensitive search & ranking', () => {
 });
 
 describe('Diện Chẩn dataset integrity & coordinate projection', () => {
-  it('includes all 35 curated core acupoints and 5 built-in protocols', () => {
+  it('includes full 2010 dataset (255+ acupoints), 35 core acupoints, and 6 built-in protocols (including 257-point default)', () => {
+    expect(ALL_ACUPOINTS.length).toBeGreaterThanOrEqual(255);
     expect(CORE_ACUPOINTS).toHaveLength(35);
-    expect(BUILTIN_PROTOCOLS).toHaveLength(5);
+    expect(BUILTIN_PROTOCOLS).toHaveLength(6);
+    expect(BUILTIN_PROTOCOLS[0].pointCodes).toHaveLength(ALL_ACUPOINTS.length);
     expect(GRID_LINES.front.length).toBeGreaterThan(10);
     expect(GRID_LINES.side.length).toBeGreaterThan(8);
   });

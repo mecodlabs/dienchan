@@ -1,6 +1,7 @@
 import type { PointCollection } from '@/domain/types';
 
 export const COLLECTIONS_STORAGE_KEY = 'dienchan.collections.v1';
+export const ACTIVE_COLLECTION_STORAGE_KEY = 'dienchan.activeCollection.v1';
 
 const STARTER_COLLECTION: PointCollection = {
   id: 'user-starter-favorites',
@@ -54,6 +55,27 @@ export function saveUserCollections(collections: PointCollection[]): void {
   if (!storage) return;
   try {
     storage.setItem(COLLECTIONS_STORAGE_KEY, JSON.stringify(collections));
+  } catch {
+    // Ignore storage quota errors gracefully
+  }
+}
+
+export function loadActiveCollectionId(defaultId: string): string {
+  const storage = getSafeStorage();
+  if (!storage) return defaultId;
+  const saved = storage.getItem(ACTIVE_COLLECTION_STORAGE_KEY);
+  return saved && saved.trim() ? saved : defaultId;
+}
+
+export function saveActiveCollectionId(id: string | null): void {
+  const storage = getSafeStorage();
+  if (!storage) return;
+  try {
+    if (id) {
+      storage.setItem(ACTIVE_COLLECTION_STORAGE_KEY, id);
+    } else {
+      storage.removeItem(ACTIVE_COLLECTION_STORAGE_KEY);
+    }
   } catch {
     // Ignore storage quota errors gracefully
   }

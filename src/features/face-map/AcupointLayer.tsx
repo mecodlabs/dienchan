@@ -1,4 +1,5 @@
 import React from 'react';
+import { DEFAULT_ALL_COLLECTION_ID } from '@/data/acupointRepository';
 import type { FaceView, PointCollection, RenderedMarker } from '@/domain/types';
 import { getMarkerScaleFactor } from '@/domain/viewport';
 
@@ -133,10 +134,14 @@ export const AcupointLayer: React.FC<AcupointLayerProps> = ({
   onSelect,
   onHover,
 }) => {
+  const [hoveredMarkerId, setHoveredMarkerId] = React.useState<string | null>(null);
   const compensation = getMarkerScaleFactor(scale);
+  const isFocusedCollection = Boolean(
+    activeCollection && activeCollection.id !== DEFAULT_ALL_COLLECTION_ID
+  );
   const collectionOrderMap = React.useMemo(() => {
     const map = new Map<string, number>();
-    if (activeCollection) {
+    if (activeCollection && isFocusedCollection) {
       activeCollection.pointCodes.forEach((code, idx) => {
         if (!map.has(code)) {
           map.set(code, idx + 1);
@@ -144,12 +149,21 @@ export const AcupointLayer: React.FC<AcupointLayerProps> = ({
       });
     }
     return map;
-  }, [activeCollection]);
+  }, [activeCollection, isFocusedCollection]);
+
+  const visibleMarkers = React.useMemo(() => {
+    if (!isFocusedCollection) return markers;
+    return markers.filter((m) => collectionOrderMap.has(m.code));
+  }, [markers, isFocusedCollection, collectionOrderMap]);
+
+  const isDenseMode = visibleMarkers.length > 70;
 
   const sequenceSegments = React.useMemo(() => {
-    if (!activeCollection || activeCollection.pointCodes.length < 2) return [];
+    if (!activeCollection || !isFocusedCollection || activeCollection.pointCodes.length < 2) {
+      return [];
+    }
     const byCode = new Map<string, RenderedMarker[]>();
-    for (const m of markers) {
+    for (const m of visibleMarkers) {
       const arr = byCode.get(m.code) ?? [];
       arr.push(m);
       byCode.set(m.code, arr);
@@ -180,10 +194,10 @@ export const AcupointLayer: React.FC<AcupointLayerProps> = ({
       });
     }
     return segments;
-  }, [activeCollection, markers]);
+  }, [activeCollection, isFocusedCollection, visibleMarkers]);
 
   const sortedMarkers = React.useMemo(() => {
-    return [...markers].sort((a, b) => {
+    return [...visibleMarkers].sort((a, b) => {
       const score = (m: RenderedMarker) => {
         if (m.code === selectedCode) return 4;
         if (m.code === hoveredCode) return 3;
@@ -192,7 +206,16 @@ export const AcupointLayer: React.FC<AcupointLayerProps> = ({
       };
       return score(a) - score(b);
     });
-  }, [markers, selectedCode, hoveredCode, collectionOrderMap]);
+  }, [visibleMarkers, selectedCode, hoveredCode, collectionOrderMap]);
+
+  const hoveredTooltipMarker = React.useMemo(() => {
+    if (!hoveredMarkerId || !hoveredCode) return null;
+    const found = visibleMarkers.find(
+      (m) => m.id === hoveredMarkerId && m.code === hoveredCode
+    );
+    if (!found || found.code === selectedCode) return null;
+    return found;
+  }, [hoveredMarkerId, hoveredCode, visibleMarkers, selectedCode]);
 
   return (
     <g aria-label="Lớp các huyệt Diện Chẩn">
@@ -219,13 +242,20 @@ export const AcupointLayer: React.FC<AcupointLayerProps> = ({
         const isHovered = marker.code === hoveredCode;
         const stepOrder = collectionOrderMap.get(marker.code);
         const inCollection = stepOrder !== undefined;
-        const isDimmed = Boolean(activeCollection && !inCollection && !isSelected && !isHovered);
         const isRedMaster = RED_MASTER_POINTS.has(marker.code);
 
         const isUnilateral =
           marker.acupoint.laterality === 'left' || marker.acupoint.laterality === 'right';
 
-        const baseRadius = isSelected ? 8.5 : inCollection ? 7.2 : isHovered ? 6.8 : 4.2;
+        const baseRadius = isSelected
+          ? 8.5
+          : inCollection
+            ? 7.2
+            : isHovered
+              ? 6.4
+              : isDenseMode
+                ? 2.8
+                : 4.2;
         const showLabel =
           showAllLabels || isSelected || isHovered || inCollection || scale >= 1.65;
 
@@ -236,6 +266,8 @@ export const AcupointLayer: React.FC<AcupointLayerProps> = ({
           marker.side,
           view === 'side'
         );
+        const denseLabelY = isDenseMode && !isSelected ? Math.round(labelOffset.dy * 0.72) : labelOffset.dy;
+        const denseLabelX = isDenseMode && !isSelected ? Math.round(labelOffset.dx * 0.78) : labelOffset.dx;
 
         const dotFill = isSelected
           ? '#C63131'
@@ -249,10 +281,15 @@ export const AcupointLayer: React.FC<AcupointLayerProps> = ({
           <g
             key={marker.id}
             transform={`translate(${marker.x}, ${marker.y}) scale(${compensation})`}
-            opacity={isDimmed ? 0.22 : 1}
             className="cursor-pointer transition-opacity duration-150"
-            onPointerEnter={() => onHover(marker.code)}
-            onPointerLeave={() => onHover(null)}
+            onPointerEnter={() => {
+              setHoveredMarkerId(marker.id);
+              onHover(marker.code);
+            }}
+            onPointerLeave={() => {
+              setHoveredMarkerId((prev) => (prev === marker.id ? null : prev));
+              onHover(null);
+            }}
             onClick={(e) => {
               e.stopPropagation();
               onSelect(marker.code, marker.x, marker.y);
@@ -337,7 +374,7 @@ export const AcupointLayer: React.FC<AcupointLayerProps> = ({
 
             {/* Clean BQC textbook number */}
             {showLabel && (
-              <g transform={`translate(${labelOffset.dx}, ${labelOffset.dy})`}>
+              <g transform={`translate(${denseLabelX}, ${denseLabelY})`}>
                 {isSelected ? (
                   <>
                     <rect
@@ -372,13 +409,13 @@ export const AcupointLayer: React.FC<AcupointLayerProps> = ({
                           ? '#B91C1C'
                           : '#1E293B'
                     }
-                    fontSize="11.5"
+                    fontSize={isDenseMode ? '8.8' : '11.5'}
                     fontWeight="700"
                     fontFamily="var(--font-mono)"
                     style={{
                       paintOrder: 'stroke',
                       stroke: '#FFFFFF',
-                      strokeWidth: 3.6,
+                      strokeWidth: isDenseMode ? 2.6 : 3.6,
                       strokeLinejoin: 'round',
                     }}
                   >
@@ -388,35 +425,41 @@ export const AcupointLayer: React.FC<AcupointLayerProps> = ({
               </g>
             )}
 
-            {/* Hover tooltip */}
-            {isHovered && !isSelected && (
-              <g transform="translate(0, -26)" className="pointer-events-none">
-                <rect
-                  x="-92"
-                  y="-24"
-                  width="184"
-                  height="24"
-                  rx="7"
-                  fill="#1A2229"
-                  fillOpacity="0.94"
-                />
-                <text
-                  y="-12"
-                  textAnchor="middle"
-                  dominantBaseline="central"
-                  fill="#FFFFFF"
-                  fontSize="10.5"
-                  fontWeight="600"
-                >
-                  {marker.acupoint.name.length > 27
-                    ? `${marker.acupoint.name.slice(0, 26)}…`
-                    : marker.acupoint.name}
-                </text>
-              </g>
-            )}
           </g>
         );
       })}
+
+      {/* Single top-most hover tooltip (rendered only on the exact hovered marker so bilateral pairs never overlap) */}
+      {hoveredTooltipMarker && (
+        <g
+          transform={`translate(${hoveredTooltipMarker.x}, ${hoveredTooltipMarker.y}) scale(${compensation})`}
+          className="pointer-events-none"
+        >
+          <g transform="translate(0, -26)">
+            <rect
+              x="-92"
+              y="-24"
+              width="184"
+              height="24"
+              rx="7"
+              fill="#1A2229"
+              fillOpacity="0.94"
+            />
+            <text
+              y="-12"
+              textAnchor="middle"
+              dominantBaseline="central"
+              fill="#FFFFFF"
+              fontSize="10.5"
+              fontWeight="600"
+            >
+              {hoveredTooltipMarker.acupoint.name.length > 27
+                ? `${hoveredTooltipMarker.acupoint.name.slice(0, 26)}…`
+                : hoveredTooltipMarker.acupoint.name}
+            </text>
+          </g>
+        </g>
+      )}
     </g>
   );
 };

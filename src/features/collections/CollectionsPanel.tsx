@@ -2,6 +2,7 @@ import React from 'react';
 import {
   ArrowLeft,
   ArrowRight,
+  Check,
   Copy,
   Download,
   FolderPlus,
@@ -11,6 +12,7 @@ import {
   Upload,
   X,
 } from 'lucide-react';
+import { DEFAULT_ALL_COLLECTION_ID } from '@/data/acupointRepository';
 import type { PointCollection } from '@/domain/types';
 
 interface CollectionsPanelProps {
@@ -33,6 +35,8 @@ interface CollectionsPanelProps {
   onExportJson: () => void;
   onImportJson: (jsonText: string) => { ok: boolean; message: string };
 }
+
+const PREVIEW_CHIP_LIMIT = 12;
 
 export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
   userCollections,
@@ -62,6 +66,16 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
   } | null>(null);
 
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
+
+  const fullAtlasCollection = React.useMemo(
+    () => builtinProtocols.find((p) => p.id === DEFAULT_ALL_COLLECTION_ID) ?? null,
+    [builtinProtocols]
+  );
+
+  const coreProtocols = React.useMemo(
+    () => builtinProtocols.filter((p) => p.id !== DEFAULT_ALL_COLLECTION_ID),
+    [builtinProtocols]
+  );
 
   const handleCreateSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -191,7 +205,81 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
         )}
       </div>
 
-      {/* Section 1: User Saved Collections */}
+      {/* Section 1: Default Full 257-Point Atlas */}
+      {fullAtlasCollection && (() => {
+        const isActive = activeCollectionId === fullAtlasCollection.id;
+        return (
+          <div className="p-3.5 pb-0">
+            <div
+              onClick={() => onActivateCollection(fullAtlasCollection)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  onActivateCollection(fullAtlasCollection);
+                }
+              }}
+              aria-pressed={isActive}
+              className={`cursor-pointer rounded-xl p-3 transition-all ${
+                isActive
+                  ? 'border-2 border-[#0F5249] bg-[#1E6F64]/15 shadow-sm ring-1 ring-[#1E6F64]/20'
+                  : 'border border-[#E2DDD3] bg-white hover:border-[#BEB5A4] hover:bg-[#FAF8F4]/70'
+              }`}
+            >
+              <div className="flex flex-wrap items-center gap-1.5">
+                <Layers
+                  className={`h-3.5 w-3.5 shrink-0 ${
+                    isActive ? 'text-[#0F5249]' : 'text-[#5B6770]'
+                  }`}
+                />
+                <span
+                  className={`text-sm font-bold ${
+                    isActive ? 'text-[#0B3D36]' : 'text-[#1A2229]'
+                  }`}
+                >
+                  {fullAtlasCollection.name}
+                </span>
+                {isActive && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-[#0F5249] px-2 py-0.5 text-[10px] font-bold text-white shadow-2xs">
+                    <Check className="h-3 w-3 stroke-[3]" />
+                    <span>Đang chọn</span>
+                  </span>
+                )}
+              </div>
+              <p
+                className={`mt-1 text-xs leading-relaxed ${
+                  isActive ? 'text-[#1F4B44]' : 'text-[#5B6770]'
+                }`}
+              >
+                {fullAtlasCollection.description}
+              </p>
+              <div
+                className={`mt-2.5 flex items-center justify-between border-t pt-2 ${
+                  isActive ? 'border-[#0F5249]/20' : 'border-[#EFECE4]'
+                }`}
+              >
+                <span
+                  className={`font-mono text-[11px] font-semibold ${
+                    isActive ? 'text-[#0F5249]' : 'text-[#5B6770]'
+                  }`}
+                >
+                  {fullAtlasCollection.pointCodes.length} huyệt
+                </span>
+                <span
+                  className={`text-[11px] font-medium ${
+                    isActive ? 'text-[#0F5249]' : 'text-[#7A858E]'
+                  }`}
+                >
+                  Mặc định
+                </span>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* Section 2: User Saved Collections (right below Bộ 257 huyệt) */}
       <div className="space-y-2.5 p-3.5">
         <div className="flex items-center justify-between">
           <h3 className="text-[11px] font-bold tracking-wider text-[#5B6770] uppercase">
@@ -204,7 +292,7 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
             Chưa có danh sách riêng. Nhấn “Tạo danh sách mới” hoặc nhân bản từ phác đồ bên dưới.
           </p>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             {userCollections.map((col) => {
               const isActive = activeCollectionId === col.id;
               const isManaging = managingId === col.id;
@@ -213,16 +301,29 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
               return (
                 <div
                   key={col.id}
-                  className={`rounded-xl border p-3 transition ${
+                  onClick={() => {
+                    if (!isEditingName) onActivateCollection(col);
+                  }}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (!isEditingName && (e.key === 'Enter' || e.key === ' ')) {
+                      e.preventDefault();
+                      onActivateCollection(col);
+                    }
+                  }}
+                  aria-pressed={isActive}
+                  className={`cursor-pointer rounded-xl p-3 transition-all ${
                     isActive
-                      ? 'border-[#1E6F64] bg-[#1E6F64]/6 shadow-2xs'
-                      : 'border-[#E2DDD3] bg-[#FAF8F4]/70 hover:border-[#CFC7B8]'
+                      ? 'border-2 border-[#0F5249] bg-[#1E6F64]/15 shadow-sm ring-1 ring-[#1E6F64]/20'
+                      : 'border border-[#E2DDD3] bg-[#FAF8F4]/70 hover:border-[#BEB5A4] hover:bg-[#FAF8F4]'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
                     {isEditingName ? (
                       <form
                         className="flex flex-1 items-center gap-1"
+                        onClick={(e) => e.stopPropagation()}
                         onSubmit={(e) => {
                           e.preventDefault();
                           if (editName.trim()) {
@@ -246,30 +347,43 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
                         </button>
                       </form>
                     ) : (
-                      <button
-                        type="button"
-                        onClick={() => onActivateCollection(isActive ? null : col)}
-                        className="min-w-0 flex-1 text-left"
-                      >
-                        <div className="flex items-center gap-1.5">
+                      <div className="min-w-0 flex-1 text-left">
+                        <div className="flex flex-wrap items-center gap-1.5">
                           <Layers
                             className={`h-3.5 w-3.5 shrink-0 ${
-                              isActive ? 'text-[#1E6F64]' : 'text-[#5B6770]'
+                              isActive ? 'text-[#0F5249]' : 'text-[#5B6770]'
                             }`}
                           />
-                          <span className="truncate text-sm font-semibold text-[#1A2229]">
+                          <span
+                            className={`truncate text-sm font-bold ${
+                              isActive ? 'text-[#0B3D36]' : 'text-[#1A2229]'
+                            }`}
+                          >
                             {col.name}
                           </span>
+                          {isActive && (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-[#0F5249] px-2 py-0.5 text-[10px] font-bold text-white shadow-2xs">
+                              <Check className="h-3 w-3 stroke-[3]" />
+                              <span>Đang chọn</span>
+                            </span>
+                          )}
                         </div>
                         {col.description && (
-                          <p className="mt-0.5 line-clamp-2 text-xs text-[#5B6770]">
+                          <p
+                            className={`mt-1 line-clamp-2 text-xs ${
+                              isActive ? 'text-[#1F4B44]' : 'text-[#5B6770]'
+                            }`}
+                          >
                             {col.description}
                           </p>
                         )}
-                      </button>
+                      </div>
                     )}
 
-                    <div className="flex shrink-0 items-center gap-1">
+                    <div
+                      className="flex shrink-0 items-center gap-1"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <button
                         type="button"
                         title="Đổi tên"
@@ -316,10 +430,13 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
                         return (
                           <div
                             key={`${col.id}-${code}-${idx}`}
+                            onClick={(e) => e.stopPropagation()}
                             className={`inline-flex items-center rounded-lg border text-xs font-semibold transition ${
                               isPointSelected
                                 ? 'border-[#C84B31] bg-[#C84B31] text-white'
-                                : 'border-[#D9D2C5] bg-white text-[#1A2229]'
+                                : isActive
+                                  ? 'border-[#0F5249]/35 bg-white text-[#0B3D36]'
+                                  : 'border-[#D9D2C5] bg-white text-[#1A2229]'
                             }`}
                           >
                             {isManaging && idx > 0 && (
@@ -338,7 +455,7 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
                                 if (!isActive) onActivateCollection(col);
                                 onSelectPointCode(code);
                               }}
-                              className="px-2 py-1 font-mono"
+                              className="px-2 py-0.5 font-mono"
                             >
                               {code}
                             </button>
@@ -357,7 +474,7 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
                                 type="button"
                                 onClick={() => onRemovePointFromCollection(col.id, code)}
                                 title={`Bỏ huyệt ${code}`}
-                                className="border-l border-current/15 px-1.5 py-1 hover:text-[#C84B31]"
+                                className="border-l border-current/15 px-1.5 py-0.5 hover:text-[#C84B31]"
                               >
                                 <X className="h-3 w-3" />
                               </button>
@@ -368,19 +485,18 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
                     )}
                   </div>
 
-                  <div className="mt-2.5 flex items-center justify-between border-t border-[#E2DDD3]/70 pt-2">
-                    <span className="font-mono text-[11px] text-[#5B6770]">
-                      {col.pointCodes.length} huyệt
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => onActivateCollection(isActive ? null : col)}
-                      className={`text-xs font-semibold transition ${
-                        isActive ? 'text-[#C84B31]' : 'text-[#1E6F64] hover:underline'
+                  <div
+                    className={`mt-2.5 flex items-center justify-between border-t pt-2 ${
+                      isActive ? 'border-[#0F5249]/20' : 'border-[#E2DDD3]/70'
+                    }`}
+                  >
+                    <span
+                      className={`font-mono text-[11px] font-semibold ${
+                        isActive ? 'text-[#0F5249]' : 'text-[#5B6770]'
                       }`}
                     >
-                      {isActive ? 'Đang chiếu trên mặt · Tắt' : 'Chiếu bộ huyệt trên mặt →'}
-                    </button>
+                      {col.pointCodes.length} huyệt
+                    </span>
                   </div>
                 </div>
               );
@@ -389,81 +505,137 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
         )}
       </div>
 
-      {/* Section 2: Built-in Core Protocols */}
+      {/* Section 3: Built-in Core Protocols */}
       <div className="space-y-2.5 border-t border-[#E2DDD3] p-3.5">
         <h3 className="text-[11px] font-bold tracking-wider text-[#5B6770] uppercase">
-          Phác đồ cơ bản tích hợp ({builtinProtocols.length})
+          Phác đồ cơ bản tích hợp ({coreProtocols.length})
         </h3>
 
-        <div className="space-y-2">
-          {builtinProtocols.map((proto) => {
+        <div className="space-y-2.5">
+          {coreProtocols.map((proto) => {
             const isActive = activeCollectionId === proto.id;
+            const visibleCodes =
+              proto.pointCodes.length > PREVIEW_CHIP_LIMIT
+                ? proto.pointCodes.slice(0, PREVIEW_CHIP_LIMIT)
+                : proto.pointCodes;
+            const hiddenCount = proto.pointCodes.length - visibleCodes.length;
+
             return (
               <div
                 key={proto.id}
-                className={`rounded-xl border p-3 transition ${
+                onClick={() => onActivateCollection(proto)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onActivateCollection(proto);
+                  }
+                }}
+                aria-pressed={isActive}
+                className={`cursor-pointer rounded-xl p-3 transition-all ${
                   isActive
-                    ? 'border-[#1E6F64] bg-[#1E6F64]/6 shadow-2xs'
-                    : 'border-[#E2DDD3] bg-white hover:border-[#CFC7B8]'
+                    ? 'border-2 border-[#0F5249] bg-[#1E6F64]/15 shadow-sm ring-1 ring-[#1E6F64]/20'
+                    : 'border border-[#E2DDD3] bg-white hover:border-[#BEB5A4] hover:bg-[#FAF8F4]/70'
                 }`}
               >
                 <div className="flex items-start justify-between gap-2">
-                  <button
-                    type="button"
-                    onClick={() => onActivateCollection(isActive ? null : proto)}
-                    className="min-w-0 flex-1 text-left"
-                  >
-                    <div className="text-sm font-semibold text-[#1A2229]">{proto.name}</div>
-                    <p className="mt-0.5 text-xs leading-relaxed text-[#5B6770]">
+                  <div className="min-w-0 flex-1 text-left">
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <Layers
+                        className={`h-3.5 w-3.5 shrink-0 ${
+                          isActive ? 'text-[#0F5249]' : 'text-[#5B6770]'
+                        }`}
+                      />
+                      <span
+                        className={`text-sm font-bold ${
+                          isActive ? 'text-[#0B3D36]' : 'text-[#1A2229]'
+                        }`}
+                      >
+                        {proto.name}
+                      </span>
+                      {isActive && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-[#0F5249] px-2 py-0.5 text-[10px] font-bold text-white shadow-2xs">
+                          <Check className="h-3 w-3 stroke-[3]" />
+                          <span>Đang chọn</span>
+                        </span>
+                      )}
+                    </div>
+                    <p
+                      className={`mt-1 text-xs leading-relaxed ${
+                        isActive ? 'text-[#1F4B44]' : 'text-[#5B6770]'
+                      }`}
+                    >
                       {proto.description}
                     </p>
-                  </button>
+                  </div>
+
                   <button
                     type="button"
-                    onClick={() => onDuplicateProtocol(proto)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDuplicateProtocol(proto);
+                    }}
                     title="Lưu thành danh sách riêng để tùy chỉnh"
-                    className="shrink-0 rounded-lg border border-[#E2DDD3] p-1.5 text-[#5B6770] transition hover:border-[#1E6F64] hover:text-[#1E6F64]"
+                    className={`shrink-0 rounded-lg border p-1.5 transition ${
+                      isActive
+                        ? 'border-[#0F5249]/35 bg-white/80 text-[#0F5249] hover:bg-white'
+                        : 'border-[#E2DDD3] bg-white text-[#5B6770] hover:border-[#1E6F64] hover:text-[#1E6F64]'
+                    }`}
                   >
                     <Copy className="h-3.5 w-3.5" />
                   </button>
                 </div>
 
                 <div className="mt-2.5 flex flex-wrap gap-1.5">
-                  {proto.pointCodes.map((code, idx) => {
+                  {visibleCodes.map((code, idx) => {
                     const isPointSelected = selectedCode === code;
                     return (
                       <button
                         key={`${proto.id}-${code}-${idx}`}
                         type="button"
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation();
                           if (!isActive) onActivateCollection(proto);
                           onSelectPointCode(code);
                         }}
-                        className={`rounded-lg border px-2 py-1 font-mono text-xs font-semibold transition ${
+                        className={`rounded-lg border px-2 py-0.5 font-mono text-xs font-semibold transition ${
                           isPointSelected
                             ? 'border-[#C84B31] bg-[#C84B31] text-white'
-                            : 'border-[#E2DDD3] bg-[#FAF8F4] text-[#1A2229] hover:border-[#1E6F64]'
+                            : isActive
+                              ? 'border-[#0F5249]/35 bg-white text-[#0B3D36] hover:border-[#0F5249]'
+                              : 'border-[#E2DDD3] bg-[#FAF8F4] text-[#1A2229] hover:border-[#1E6F64]'
                         }`}
                       >
                         {code}
                       </button>
                     );
                   })}
+                  {hiddenCount > 0 && (
+                    <span
+                      className={`inline-flex items-center rounded-lg px-2 py-0.5 font-mono text-[11px] font-semibold ${
+                        isActive
+                          ? 'bg-[#0F5249]/15 text-[#0B3D36]'
+                          : 'bg-[#F0ECE4] text-[#5B6770]'
+                      }`}
+                    >
+                      +{hiddenCount} huyệt
+                    </span>
+                  )}
                 </div>
 
-                <div className="mt-2.5 flex items-center justify-between border-t border-[#EFECE4] pt-2">
-                  <span className="font-mono text-[11px] text-[#5B6770]">
-                    {proto.pointCodes.length} huyệt
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => onActivateCollection(isActive ? null : proto)}
-                    className={`text-xs font-semibold transition ${
-                      isActive ? 'text-[#C84B31]' : 'text-[#1E6F64] hover:underline'
+                <div
+                  className={`mt-2.5 flex items-center justify-between border-t pt-2 ${
+                    isActive ? 'border-[#0F5249]/20' : 'border-[#EFECE4]'
+                  }`}
+                >
+                  <span
+                    className={`font-mono text-[11px] font-semibold ${
+                      isActive ? 'text-[#0F5249]' : 'text-[#5B6770]'
                     }`}
                   >
-                    {isActive ? 'Đang chiếu trên mặt · Tắt' : 'Chiếu bộ huyệt trên mặt →'}
-                  </button>
+                    {proto.pointCodes.length} huyệt
+                  </span>
                 </div>
               </div>
             );

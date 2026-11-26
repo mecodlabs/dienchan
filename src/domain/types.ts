@@ -18,6 +18,7 @@ export interface Point2D {
 export interface Acupoint {
   code: string;
   name: string;
+  tier?: 'core' | 'standard';
   region: FaceRegion;
   regionLabel: string;
   laterality: Laterality;

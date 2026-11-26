@@ -7,20 +7,28 @@ import type { Acupoint, FaceRegion } from '@/domain/types';
 interface SearchSidebarProps {
   query: string;
   region: FaceRegion | 'all';
+  datasetScope: 'all' | 'core';
+  totalAllCount: number;
+  totalCoreCount: number;
   results: Acupoint[];
   selectedCode: string | null;
   onQueryChange: (query: string) => void;
   onRegionChange: (region: FaceRegion | 'all') => void;
+  onDatasetScopeChange: (scope: 'all' | 'core') => void;
   onSelectPoint: (point: Acupoint) => void;
 }
 
 export const SearchSidebar: React.FC<SearchSidebarProps> = ({
   query,
   region,
+  datasetScope,
+  totalAllCount,
+  totalCoreCount,
   results,
   selectedCode,
   onQueryChange,
   onRegionChange,
+  onDatasetScopeChange,
   onSelectPoint,
 }) => {
   return (
@@ -93,23 +101,50 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
         </div>
       </div>
 
-      {/* Result Count Bar */}
-      <div className="flex shrink-0 items-center justify-between border-b border-[#EFECE4] bg-white px-3.5 py-2 text-xs text-[#5B6770]">
-        <span>
-          Hiển thị <strong className="font-semibold text-[#1A2229]">{results.length}</strong> huyệt
-        </span>
-        {(query || region !== 'all') && (
+      {/* Result Count & Dataset Scope Bar */}
+      <div className="flex shrink-0 items-center justify-between gap-2 border-b border-[#EFECE4] bg-white px-3.5 py-2 text-xs text-[#5B6770]">
+        <div className="inline-flex rounded-lg bg-[#F2EFE8] p-0.5">
           <button
             type="button"
-            onClick={() => {
-              onQueryChange('');
-              onRegionChange('all');
-            }}
-            className="font-medium text-[#C84B31] hover:underline"
+            onClick={() => onDatasetScopeChange('all')}
+            className={`rounded-md px-2 py-1 text-[11px] font-semibold transition ${
+              datasetScope === 'all'
+                ? 'bg-white text-[#1A2229] shadow-2xs'
+                : 'text-[#5B6770] hover:text-[#1A2229]'
+            }`}
           >
-            Xóa bộ lọc
+            Tất cả ({totalAllCount})
           </button>
-        )}
+          <button
+            type="button"
+            onClick={() => onDatasetScopeChange('core')}
+            className={`rounded-md px-2 py-1 text-[11px] font-semibold transition ${
+              datasetScope === 'core'
+                ? 'bg-white text-[#1A2229] shadow-2xs'
+                : 'text-[#5B6770] hover:text-[#1A2229]'
+            }`}
+          >
+            Cốt lõi ({totalCoreCount})
+          </button>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span>
+            <strong className="font-semibold text-[#1A2229]">{results.length}</strong> huyệt
+          </span>
+          {(query || region !== 'all') && (
+            <button
+              type="button"
+              onClick={() => {
+                onQueryChange('');
+                onRegionChange('all');
+              }}
+              className="font-medium text-[#C84B31] hover:underline"
+            >
+              Xóa lọc
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Results List */}

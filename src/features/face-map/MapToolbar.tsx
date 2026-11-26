@@ -6,11 +6,13 @@ import {
   Grid3X3,
   Layers,
   Minus,
+  PanelLeftOpen,
   Plus,
   RotateCcw,
   Tag,
   X,
 } from 'lucide-react';
+import { DEFAULT_ALL_COLLECTION_ID } from '@/data/acupointRepository';
 import type { Acupoint, FaceView, PointCollection } from '@/domain/types';
 
 interface MapToolbarProps {
@@ -21,6 +23,8 @@ interface MapToolbarProps {
   activeCollection: PointCollection | null;
   collectionPoints: Acupoint[];
   selectedCode: string | null;
+  isDesktopSidebarOpen?: boolean;
+  onOpenDesktopSidebar?: () => void;
   onChangeView: (view: FaceView) => void;
   onToggleGrid: () => void;
   onToggleLabels: () => void;
@@ -39,6 +43,8 @@ export const MapToolbar: React.FC<MapToolbarProps> = ({
   activeCollection,
   collectionPoints,
   selectedCode,
+  isDesktopSidebarOpen = true,
+  onOpenDesktopSidebar,
   onChangeView,
   onToggleGrid,
   onToggleLabels,
@@ -48,6 +54,9 @@ export const MapToolbar: React.FC<MapToolbarProps> = ({
   onSelectCollectionPoint,
   onClearCollection,
 }) => {
+  const showStepBar = Boolean(
+    activeCollection && activeCollection.id !== DEFAULT_ALL_COLLECTION_ID
+  );
   const activeStepIndex = React.useMemo(() => {
     if (!activeCollection || !selectedCode) return -1;
     return activeCollection.pointCodes.indexOf(selectedCode);
@@ -66,30 +75,45 @@ export const MapToolbar: React.FC<MapToolbarProps> = ({
 
   return (
     <>
-      {/* Top-left: Anatomical view switcher */}
-      <div className="pointer-events-auto absolute top-3 left-3 z-20 flex items-center gap-1 rounded-xl border border-[#DED8CC] bg-white/90 p-1 shadow-sm backdrop-blur-md">
-        <button
-          type="button"
-          onClick={() => onChangeView('front')}
-          className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
-            view === 'front'
-              ? 'bg-[#1A2229] text-white shadow-xs'
-              : 'text-[#5B6770] hover:bg-[#F5F3EE] hover:text-[#1A2229]'
-          }`}
-        >
-          Chính diện
-        </button>
-        <button
-          type="button"
-          onClick={() => onChangeView('side')}
-          className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
-            view === 'side'
-              ? 'bg-[#1A2229] text-white shadow-xs'
-              : 'text-[#5B6770] hover:bg-[#F5F3EE] hover:text-[#1A2229]'
-          }`}
-        >
-          Mặt nghiêng
-        </button>
+      {/* Top-left: Desktop sidebar expand button (when collapsed) + Anatomical view switcher */}
+      <div className="pointer-events-auto absolute top-3 left-3 z-20 flex items-center gap-2">
+        {!isDesktopSidebarOpen && onOpenDesktopSidebar && (
+          <button
+            type="button"
+            onClick={onOpenDesktopSidebar}
+            title="Mở thanh Bộ huyệt & Tra cứu"
+            aria-label="Mở thanh Bộ huyệt và Tra cứu"
+            className="hidden items-center gap-1.5 rounded-xl border border-[#1E6F64]/40 bg-white/95 px-3 py-2 text-xs font-bold text-[#1E6F64] shadow-sm backdrop-blur-md transition hover:bg-[#1E6F64] hover:text-white lg:inline-flex"
+          >
+            <PanelLeftOpen className="h-4 w-4" />
+            <span>Mở menu</span>
+          </button>
+        )}
+
+        <div className="flex items-center gap-1 rounded-xl border border-[#DED8CC] bg-white/90 p-1 shadow-sm backdrop-blur-md">
+          <button
+            type="button"
+            onClick={() => onChangeView('front')}
+            className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+              view === 'front'
+                ? 'bg-[#1A2229] text-white shadow-xs'
+                : 'text-[#5B6770] hover:bg-[#F5F3EE] hover:text-[#1A2229]'
+            }`}
+          >
+            Chính diện
+          </button>
+          <button
+            type="button"
+            onClick={() => onChangeView('side')}
+            className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+              view === 'side'
+                ? 'bg-[#1A2229] text-white shadow-xs'
+                : 'text-[#5B6770] hover:bg-[#F5F3EE] hover:text-[#1A2229]'
+            }`}
+          >
+            Mặt nghiêng
+          </button>
+        </div>
       </div>
 
       {/* Top-right: Overlay toggles */}
@@ -199,8 +223,8 @@ export const MapToolbar: React.FC<MapToolbarProps> = ({
         </div>
       </div>
 
-      {/* Active Protocol / Saved List Step-Through Bar (sits cleanly above mobile dock on <lg, bottom-left on lg+) */}
-      {activeCollection && (
+      {/* Active Protocol / Saved List Step-Through Bar (only for focused protocols/custom lists) */}
+      {showStepBar && activeCollection && (
         <div className="pointer-events-auto absolute right-3 bottom-[68px] left-3 z-20 flex items-center justify-between gap-2 rounded-2xl border border-[#1E6F64]/30 bg-white/96 px-3 py-2 shadow-lg backdrop-blur-md lg:right-auto lg:bottom-3 lg:left-3 lg:w-auto lg:max-w-[calc(100%-240px)]">
           <div className="flex min-w-0 items-center gap-2">
             <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#1E6F64]/12 text-[#1E6F64]">

@@ -3,13 +3,16 @@ import {
   BookOpen,
   Info,
   Layers,
+  PanelLeftClose,
   Search,
   Sparkles,
   X,
 } from 'lucide-react';
 import {
+  ALL_ACUPOINTS,
   BUILTIN_PROTOCOLS,
   CORE_ACUPOINTS,
+  DEFAULT_ALL_COLLECTION_ID,
   GRID_LINES,
   getAcupointByCode,
   resolveCollectionAcupoints,
@@ -18,9 +21,11 @@ import {
   createCollection,
   deleteCollection,
   exportCollectionsJson,
+  loadActiveCollectionId,
   loadUserCollections,
   parseImportedCollectionsJson,
   reorderPointInCollection,
+  saveActiveCollectionId,
   saveUserCollections,
   togglePointInCollection,
   updateCollection,
@@ -53,16 +58,31 @@ export function App() {
   const [selectedCode, setSelectedCode] = React.useState<string | null>(null);
   const [hoveredCode, setHoveredCode] = React.useState<string | null>(null);
 
-  // Search & sidebar states
-  const [sidebarTab, setSidebarTab] = React.useState<SidebarTab>('search');
+  // Search & sidebar states (default to Bộ huyệt tab, collapsible on desktop)
+  const [sidebarTab, setSidebarTab] = React.useState<SidebarTab>('collections');
+  const [isDesktopSidebarOpen, setIsDesktopSidebarOpen] = React.useState(true);
+  const [datasetScope, setDatasetScope] = React.useState<'all' | 'core'>('all');
   const [searchQuery, setSearchQuery] = React.useState('');
   const [regionFilter, setRegionFilter] = React.useState<FaceRegion | 'all'>('all');
 
-  // Collections & active protocol mode
+  // Collections & active protocol mode (defaults to "Bộ 257 huyệt (2010)" if user hasn't picked another)
   const [userCollections, setUserCollections] = React.useState<PointCollection[]>(() =>
     loadUserCollections()
   );
-  const [activeCollectionId, setActiveCollectionId] = React.useState<string | null>(null);
+  const [activeCollectionId, setActiveCollectionIdState] = React.useState<string>(() => {
+    const initialUserCols = loadUserCollections();
+    const saved = loadActiveCollectionId(DEFAULT_ALL_COLLECTION_ID);
+    const exists =
+      initialUserCols.some((c) => c.id === saved) ||
+      BUILTIN_PROTOCOLS.some((p) => p.id === saved);
+    return exists ? saved : DEFAULT_ALL_COLLECTION_ID;
+  });
+
+  const setActiveCollectionId = React.useCallback((nextId: string | null) => {
+    const resolved = nextId ?? DEFAULT_ALL_COLLECTION_ID;
+    setActiveCollectionIdState(resolved);
+    saveActiveCollectionId(resolved);
+  }, []);
 
   // Mobile sheet & Info popover states
   const [mobileSheet, setMobileSheet] = React.useState<MobileSheetMode>('closed');
@@ -107,16 +127,21 @@ export function App() {
   }, [sheetDragY, mobileSheetExpanded, closeMobileSheet]);
 
   // Derived data
+  const activeDataset = React.useMemo(
+    () => (datasetScope === 'all' ? ALL_ACUPOINTS : CORE_ACUPOINTS),
+    [datasetScope]
+  );
+
   const markers = React.useMemo(
-    () => projectAcupointsForView(CORE_ACUPOINTS, view),
-    [view]
+    () => projectAcupointsForView(activeDataset, view),
+    [activeDataset, view]
   );
 
   const gridLines = React.useMemo(() => GRID_LINES[view], [view]);
 
   const filteredAcupoints = React.useMemo(
-    () => searchAcupoints(CORE_ACUPOINTS, searchQuery, regionFilter),
-    [searchQuery, regionFilter]
+    () => searchAcupoints(activeDataset, searchQuery, regionFilter),
+    [activeDataset, searchQuery, regionFilter]
   );
 
   const selectedPoint = React.useMemo(
@@ -200,8 +225,13 @@ export function App() {
 
   const handleActivateCollection = React.useCallback(
     (collection: PointCollection | null) => {
-      if (!collection) {
-        setActiveCollectionId(null);
+      if (!collection || collection.id === DEFAULT_ALL_COLLECTION_ID) {
+        setActiveCollectionId(DEFAULT_ALL_COLLECTION_ID);
+        setDatasetScope('all');
+        viewportRef.current?.resetView();
+        if (window.innerWidth < 1024) {
+          setMobileSheet('closed');
+        }
         return;
       }
       setActiveCollectionId(collection.id);
@@ -216,7 +246,7 @@ export function App() {
         setMobileSheet('closed');
       }
     },
-    []
+    [setActiveCollectionId]
   );
 
   // User Collection CRUD handlers
@@ -333,7 +363,9 @@ export function App() {
                 Diện Chẩn Atlas
               </h1>
               <span className="hidden rounded-md bg-[#1E6F64]/12 px-2 py-0.5 font-mono text-[11px] font-semibold text-[#1E6F64] sm:inline-block">
-                {CORE_ACUPOINTS.length} huyệt cốt lõi
+                {datasetScope === 'all'
+                  ? `${ALL_ACUPOINTS.length} huyệt (2010)`
+                  : `${CORE_ACUPOINTS.length} huyệt cốt lõi`}
               </span>
             </div>
             <p className="hidden text-[11px] text-[#5B6770] sm:block">
@@ -399,7 +431,7 @@ export function App() {
                 <strong>2. Thao tác trên đồ hình:</strong> Kéo để di chuyển, cuộn chuột hoặc chụm 2 ngón tay để phóng to/thu nhỏ, nhấp đúp để phóng nhanh.
               </li>
               <li>
-                <strong>3. Tính chất tham khảo:</strong> Bản MVP nạp trước {CORE_ACUPOINTS.length} huyệt thông dụng nhất. Khi thực hành luôn kết hợp dò sinh huyệt thực tế và lưu ý các huyệt ảnh hưởng huyết áp (<code className="font-mono font-semibold">19</code>, <code className="font-mono font-semibold">26</code>).
+                <strong>3. Tính chất tham khảo:</strong> Khi thực hành luôn kết hợp dò sinh huyệt thực tế và lưu ý các huyệt ảnh hưởng huyết áp (<code className="font-mono font-semibold">19</code>, <code className="font-mono font-semibold">26</code>).
               </li>
             </ul>
           </div>
@@ -408,68 +440,86 @@ export function App() {
 
       {/* Main 3-Pane Workspace */}
       <div className="relative flex min-h-0 flex-1 overflow-hidden">
-        {/* Desktop Left Sidebar (Search + Saved Collections) */}
-        <aside className="hidden w-[348px] shrink-0 flex-col border-r border-[#E2DDD3] bg-white lg:flex">
-          <div className="grid shrink-0 grid-cols-2 gap-1 border-b border-[#E2DDD3] bg-[#FAF8F4] p-2">
-            <button
-              type="button"
-              onClick={() => setSidebarTab('search')}
-              className={`flex items-center justify-center gap-1.5 rounded-xl py-2 text-xs font-semibold transition ${
-                sidebarTab === 'search'
-                  ? 'bg-white text-[#1A2229] shadow-xs'
-                  : 'text-[#5B6770] hover:text-[#1A2229]'
-              }`}
-            >
-              <Search className="h-3.5 w-3.5" />
-              <span>Tra cứu huyệt</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setSidebarTab('collections')}
-              className={`flex items-center justify-center gap-1.5 rounded-xl py-2 text-xs font-semibold transition ${
-                sidebarTab === 'collections'
-                  ? 'bg-white text-[#1A2229] shadow-xs'
-                  : 'text-[#5B6770] hover:text-[#1A2229]'
-              }`}
-            >
-              <Layers className="h-3.5 w-3.5" />
-              <span>
-                Bộ huyệt ({userCollections.length + BUILTIN_PROTOCOLS.length})
-              </span>
-            </button>
-          </div>
+        {/* Desktop Left Sidebar (Collapsible: Bộ huyệt first, Tra cứu second) */}
+        {isDesktopSidebarOpen && (
+          <aside className="hidden w-[348px] shrink-0 flex-col border-r border-[#E2DDD3] bg-white lg:flex">
+            <div className="flex shrink-0 items-center gap-1.5 border-b border-[#E2DDD3] bg-[#FAF8F4] p-2">
+              <div className="grid flex-1 grid-cols-2 gap-1">
+                <button
+                  type="button"
+                  onClick={() => setSidebarTab('collections')}
+                  className={`flex items-center justify-center gap-1.5 rounded-xl py-2 text-xs font-semibold transition ${
+                    sidebarTab === 'collections'
+                      ? 'bg-[#1E6F64] text-white shadow-xs'
+                      : 'text-[#5B6770] hover:bg-white/70 hover:text-[#1A2229]'
+                  }`}
+                >
+                  <Layers className="h-3.5 w-3.5" />
+                  <span>
+                    Bộ huyệt ({userCollections.length + BUILTIN_PROTOCOLS.length})
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSidebarTab('search')}
+                  className={`flex items-center justify-center gap-1.5 rounded-xl py-2 text-xs font-semibold transition ${
+                    sidebarTab === 'search'
+                      ? 'bg-[#1A2229] text-white shadow-xs'
+                      : 'text-[#5B6770] hover:bg-white/70 hover:text-[#1A2229]'
+                  }`}
+                >
+                  <Search className="h-3.5 w-3.5" />
+                  <span>Tra cứu huyệt</span>
+                </button>
+              </div>
 
-          <div className="min-h-0 flex-1">
-            {sidebarTab === 'search' ? (
-              <SearchSidebar
-                query={searchQuery}
-                region={regionFilter}
-                results={filteredAcupoints}
-                selectedCode={selectedCode}
-                onQueryChange={setSearchQuery}
-                onRegionChange={setRegionFilter}
-                onSelectPoint={handleSelectPointFromList}
-              />
-            ) : (
-              <CollectionsPanel
-                userCollections={userCollections}
-                builtinProtocols={BUILTIN_PROTOCOLS}
-                activeCollectionId={activeCollectionId}
-                selectedCode={selectedCode}
-                onActivateCollection={handleActivateCollection}
-                onSelectPointCode={handleSelectPointCode}
-                onCreateCollection={handleCreateCollection}
-                onRenameCollection={handleRenameCollection}
-                onDeleteCollection={handleDeleteCollection}
-                onRemovePointFromCollection={handleTogglePointInCollection}
-                onReorderPointInCollection={handleReorderPoint}
-                onDuplicateProtocol={handleDuplicateProtocol}
-                onExportJson={handleExportJson}
-                onImportJson={handleImportJson}
-              />
-            )}
-          </div>
-        </aside>
+              <button
+                type="button"
+                onClick={() => setIsDesktopSidebarOpen(false)}
+                title="Thu gọn thanh bên để mở rộng đồ hình"
+                aria-label="Thu gọn thanh bên"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-[#DED8CC] bg-white text-[#5B6770] transition hover:border-[#1A2229] hover:text-[#1A2229]"
+              >
+                <PanelLeftClose className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="min-h-0 flex-1">
+              {sidebarTab === 'collections' ? (
+                <CollectionsPanel
+                  userCollections={userCollections}
+                  builtinProtocols={BUILTIN_PROTOCOLS}
+                  activeCollectionId={activeCollectionId}
+                  selectedCode={selectedCode}
+                  onActivateCollection={handleActivateCollection}
+                  onSelectPointCode={handleSelectPointCode}
+                  onCreateCollection={handleCreateCollection}
+                  onRenameCollection={handleRenameCollection}
+                  onDeleteCollection={handleDeleteCollection}
+                  onRemovePointFromCollection={handleTogglePointInCollection}
+                  onReorderPointInCollection={handleReorderPoint}
+                  onDuplicateProtocol={handleDuplicateProtocol}
+                  onExportJson={handleExportJson}
+                  onImportJson={handleImportJson}
+                />
+              ) : (
+                <SearchSidebar
+                  query={searchQuery}
+                  region={regionFilter}
+                  datasetScope={datasetScope}
+                  totalAllCount={ALL_ACUPOINTS.length}
+                  totalCoreCount={CORE_ACUPOINTS.length}
+                  results={filteredAcupoints}
+                  selectedCode={selectedCode}
+                  onQueryChange={setSearchQuery}
+                  onRegionChange={setRegionFilter}
+                  onDatasetScopeChange={setDatasetScope}
+                  onSelectPoint={handleSelectPointFromList}
+                />
+              )}
+            </div>
+          </aside>
+        )}
 
         {/* Center Interactive 2D Pseudo-3D Face Map */}
         <main className="relative min-w-0 flex-1">
@@ -500,6 +550,8 @@ export function App() {
             activeCollection={activeCollection}
             collectionPoints={activeCollectionPoints}
             selectedCode={selectedCode}
+            isDesktopSidebarOpen={isDesktopSidebarOpen}
+            onOpenDesktopSidebar={() => setIsDesktopSidebarOpen(true)}
             onChangeView={handleChangeView}
             onToggleGrid={() => setShowGrid((v) => !v)}
             onToggleLabels={() => setShowLabels((v) => !v)}
@@ -507,20 +559,12 @@ export function App() {
             onZoomOut={() => viewportRef.current?.zoomOut()}
             onResetView={() => viewportRef.current?.resetView()}
             onSelectCollectionPoint={handleSelectPointCode}
-            onClearCollection={() => setActiveCollectionId(null)}
+            onClearCollection={() => setActiveCollectionId(DEFAULT_ALL_COLLECTION_ID)}
           />
 
-          {/* Mobile Quick Dock Buttons (full-width bottom bar, zero overlap with right-rail zoom) */}
+          {/* Mobile Quick Dock Buttons (Bộ huyệt first, Tra cứu second) */}
           {mobileSheet === 'closed' && (
             <div className="pointer-events-auto absolute inset-x-3 bottom-3 z-20 flex items-center gap-2 pb-[env(safe-area-inset-bottom)] lg:hidden">
-              <button
-                type="button"
-                onClick={() => setMobileSheet('search')}
-                className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-2xl border border-[#D4CEC2] bg-white/96 px-3 py-2.5 text-xs font-semibold text-[#1A2229] shadow-md backdrop-blur-md active:bg-[#F5F3EE]"
-              >
-                <Search className="h-4 w-4 shrink-0 text-[#C84B31]" />
-                <span>Tra cứu</span>
-              </button>
               <button
                 type="button"
                 onClick={() => setMobileSheet('collections')}
@@ -528,6 +572,14 @@ export function App() {
               >
                 <Layers className="h-4 w-4 shrink-0 text-[#1E6F64]" />
                 <span>Bộ huyệt</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setMobileSheet('search')}
+                className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-2xl border border-[#D4CEC2] bg-white/96 px-3 py-2.5 text-xs font-semibold text-[#1A2229] shadow-md backdrop-blur-md active:bg-[#F5F3EE]"
+              >
+                <Search className="h-4 w-4 shrink-0 text-[#C84B31]" />
+                <span>Tra cứu</span>
               </button>
               {selectedPoint && (
                 <button
@@ -595,9 +647,20 @@ export function App() {
                 <span className="h-1.5 w-11 rounded-full bg-[#CFC8BA]" />
               </button>
 
-              {/* Drawer Header */}
+              {/* Drawer Header (Bộ huyệt first, Tra cứu second) */}
               <div className="flex items-center justify-between border-b border-[#EFECE4] px-3.5 pb-2.5">
                 <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setMobileSheet('collections')}
+                    className={`rounded-lg px-2.5 py-1.5 text-xs font-semibold ${
+                      mobileSheet === 'collections'
+                        ? 'bg-[#1E6F64] text-white'
+                        : 'text-[#5B6770]'
+                    }`}
+                  >
+                    Bộ huyệt
+                  </button>
                   <button
                     type="button"
                     onClick={() => setMobileSheet('search')}
@@ -608,17 +671,6 @@ export function App() {
                     }`}
                   >
                     Tra cứu
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setMobileSheet('collections')}
-                    className={`rounded-lg px-2.5 py-1.5 text-xs font-semibold ${
-                      mobileSheet === 'collections'
-                        ? 'bg-[#1A2229] text-white'
-                        : 'text-[#5B6770]'
-                    }`}
-                  >
-                    Bộ huyệt
                   </button>
                   {selectedPoint && (
                     <button
@@ -660,10 +712,14 @@ export function App() {
                 <SearchSidebar
                   query={searchQuery}
                   region={regionFilter}
+                  datasetScope={datasetScope}
+                  totalAllCount={ALL_ACUPOINTS.length}
+                  totalCoreCount={CORE_ACUPOINTS.length}
                   results={filteredAcupoints}
                   selectedCode={selectedCode}
                   onQueryChange={setSearchQuery}
                   onRegionChange={setRegionFilter}
+                  onDatasetScopeChange={setDatasetScope}
                   onSelectPoint={handleSelectPointFromList}
                 />
               )}

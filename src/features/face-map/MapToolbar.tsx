@@ -125,44 +125,83 @@ export const MapToolbar: React.FC<MapToolbarProps> = ({
         </button>
       </div>
 
-      {/* Bottom-right: Zoom & Reset HUD */}
-      <div className="pointer-events-auto absolute right-3 bottom-3 z-20 flex flex-col items-end gap-1.5">
-        <div className="flex items-center gap-1 rounded-xl border border-[#DED8CC] bg-white/92 p-1 shadow-sm backdrop-blur-md">
+      {/* Mobile Right-Rail Zoom & Reset Controls (large 44x44px touch targets, never overlaps bottom dock) */}
+      <div className="pointer-events-auto absolute top-16 right-3 z-20 flex flex-col items-center gap-2 lg:hidden">
+        <div className="flex flex-col items-center overflow-hidden rounded-2xl border border-[#D4CEC2] bg-white/96 shadow-lg backdrop-blur-md">
+          <button
+            type="button"
+            onClick={onZoomIn}
+            aria-label="Phóng to"
+            title="Phóng to"
+            className="flex h-11 w-11 items-center justify-center text-[#1A2229] transition active:bg-[#1A2229] active:text-white"
+          >
+            <Plus className="h-5 w-5 stroke-[2.4]" />
+          </button>
+          <div className="w-8 border-t border-[#E6E1D7]" />
+          <div className="flex h-7 w-11 items-center justify-center bg-[#FAF8F4] font-mono text-[10px] font-bold text-[#1E6F64]">
+            {Math.round(scale * 100)}%
+          </div>
+          <div className="w-8 border-t border-[#E6E1D7]" />
           <button
             type="button"
             onClick={onZoomOut}
             aria-label="Thu nhỏ"
-            className="flex h-7 w-7 items-center justify-center rounded-lg text-[#1A2229] transition hover:bg-[#F5F3EE]"
+            title="Thu nhỏ"
+            className="flex h-11 w-11 items-center justify-center text-[#1A2229] transition active:bg-[#1A2229] active:text-white"
           >
-            <Minus className="h-3.5 w-3.5" />
+            <Minus className="h-5 w-5 stroke-[2.4]" />
           </button>
-          <span className="min-w-[44px] text-center font-mono text-[11px] font-semibold text-[#5B6770]">
+        </div>
+
+        <button
+          type="button"
+          onClick={onResetView}
+          aria-label="Đặt lại góc nhìn"
+          title="Đặt lại góc nhìn ban đầu"
+          className="flex h-11 w-11 items-center justify-center rounded-2xl border border-[#D4CEC2] bg-white/96 text-[#1A2229] shadow-lg backdrop-blur-md transition active:bg-[#1A2229] active:text-white"
+        >
+          <RotateCcw className="h-4.5 w-4.5 stroke-[2.2]" />
+        </button>
+      </div>
+
+      {/* Desktop Bottom-Right: Horizontal Zoom & Reset HUD */}
+      <div className="pointer-events-auto absolute right-3 bottom-3 z-20 hidden flex-col items-end gap-1.5 lg:flex">
+        <div className="flex items-center gap-1 rounded-xl border border-[#DED8CC] bg-white/94 p-1 shadow-sm backdrop-blur-md">
+          <button
+            type="button"
+            onClick={onZoomOut}
+            aria-label="Thu nhỏ"
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-[#1A2229] transition hover:bg-[#F5F3EE]"
+          >
+            <Minus className="h-4 w-4" />
+          </button>
+          <span className="min-w-[46px] text-center font-mono text-xs font-semibold text-[#5B6770]">
             {Math.round(scale * 100)}%
           </span>
           <button
             type="button"
             onClick={onZoomIn}
             aria-label="Phóng to"
-            className="flex h-7 w-7 items-center justify-center rounded-lg text-[#1A2229] transition hover:bg-[#F5F3EE]"
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-[#1A2229] transition hover:bg-[#F5F3EE]"
           >
-            <Plus className="h-3.5 w-3.5" />
+            <Plus className="h-4 w-4" />
           </button>
           <div className="mx-0.5 h-4 w-px bg-[#E2DDD3]" />
           <button
             type="button"
             onClick={onResetView}
             title="Đặt lại góc nhìn ban đầu"
-            className="flex h-7 items-center gap-1 rounded-lg px-2 text-xs font-semibold text-[#5B6770] transition hover:bg-[#F5F3EE] hover:text-[#1A2229]"
+            className="flex h-8 items-center gap-1 rounded-lg px-2.5 text-xs font-semibold text-[#5B6770] transition hover:bg-[#F5F3EE] hover:text-[#1A2229]"
           >
-            <RotateCcw className="h-3 w-3" />
-            <span className="hidden sm:inline">Đặt lại</span>
+            <RotateCcw className="h-3.5 w-3.5" />
+            <span>Đặt lại</span>
           </button>
         </div>
       </div>
 
-      {/* Bottom-left / Bottom-above-dock: Active Protocol / Saved List Step-Through Bar */}
+      {/* Active Protocol / Saved List Step-Through Bar (sits cleanly above mobile dock on <lg, bottom-left on lg+) */}
       {activeCollection && (
-        <div className="pointer-events-auto absolute right-3 bottom-16 left-3 z-20 flex items-center justify-between gap-2 rounded-2xl border border-[#1E6F64]/30 bg-white/95 px-3 py-2 shadow-lg backdrop-blur-md sm:right-auto sm:bottom-3 sm:left-3 sm:w-auto sm:max-w-[calc(100%-230px)]">
+        <div className="pointer-events-auto absolute right-3 bottom-[68px] left-3 z-20 flex items-center justify-between gap-2 rounded-2xl border border-[#1E6F64]/30 bg-white/96 px-3 py-2 shadow-lg backdrop-blur-md lg:right-auto lg:bottom-3 lg:left-3 lg:w-auto lg:max-w-[calc(100%-240px)]">
           <div className="flex min-w-0 items-center gap-2">
             <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#1E6F64]/12 text-[#1E6F64]">
               <Layers className="h-4 w-4" />

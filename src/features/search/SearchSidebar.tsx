@@ -113,7 +113,10 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
       </div>
 
       {/* Results List */}
-      <div className="custom-scrollbar flex-1 overflow-y-auto bg-white p-2">
+      <div
+        style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}
+        className="custom-scrollbar min-h-0 flex-1 overflow-y-auto overscroll-contain bg-white p-2"
+      >
         {results.length === 0 ? (
           <div className="flex flex-col items-center justify-center px-4 py-12 text-center">
             <div className="mb-2 rounded-full bg-[#F5F3EE] p-3 text-[#8A949C]">

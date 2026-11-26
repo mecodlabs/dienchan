@@ -176,7 +176,10 @@ export const AcupointDetailSheet: React.FC<AcupointDetailSheetProps> = ({
       </div>
 
       {/* Body Content */}
-      <div className="custom-scrollbar flex-1 space-y-4 overflow-y-auto p-4">
+      <div
+        style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}
+        className="custom-scrollbar min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain p-4"
+      >
         {missingOnSideView && (
           <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs leading-relaxed text-amber-900">
             Huyệt <strong>{point.code}</strong> nằm đơn bên ở nửa mặt <strong>Trái người bệnh</strong>, nên không hiển thị trên đồ hình Mặt nghiêng Phải. Nhấn nút phía trên để chuyển sang góc Chính diện.

@@ -87,7 +87,10 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
   };
 
   return (
-    <div className="custom-scrollbar flex h-full min-h-0 flex-col overflow-y-auto bg-white">
+    <div
+      style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}
+      className="custom-scrollbar flex h-full min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain bg-white"
+    >
       {/* Top Action Strip: Create / Export / Import */}
       <div className="shrink-0 space-y-2.5 border-b border-[#E2DDD3] bg-[#FAF8F4] p-3.5">
         <div className="flex items-center justify-between gap-2">

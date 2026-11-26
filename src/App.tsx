@@ -67,6 +67,7 @@ export function App() {
 
   // Mobile sheet & Info popover states
   const [mobileSheet, setMobileSheet] = React.useState<MobileSheetMode>('closed');
+  const [mobileSheetExpanded, setMobileSheetExpanded] = React.useState(false);
   const [showInfoPopover, setShowInfoPopover] = React.useState(false);
 
   // Derived data
@@ -473,34 +474,30 @@ export function App() {
             onClearCollection={() => setActiveCollectionId(null)}
           />
 
-          {/* Mobile Quick Dock Buttons (Bottom Left, only when no protocol bar & sheet closed) */}
+          {/* Mobile Quick Dock Buttons (full-width bottom bar, zero overlap with right-rail zoom) */}
           {mobileSheet === 'closed' && (
-            <div
-              className={`pointer-events-auto absolute left-3 z-20 flex items-center gap-2 lg:hidden ${
-                activeCollection ? 'bottom-16' : 'bottom-3'
-              }`}
-            >
+            <div className="pointer-events-auto absolute inset-x-3 bottom-3 z-20 flex items-center gap-2 pb-[env(safe-area-inset-bottom)] lg:hidden">
               <button
                 type="button"
                 onClick={() => setMobileSheet('search')}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-[#DED8CC] bg-white/95 px-3 py-2 text-xs font-semibold text-[#1A2229] shadow-md backdrop-blur-md"
+                className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-2xl border border-[#D4CEC2] bg-white/96 px-3 py-2.5 text-xs font-semibold text-[#1A2229] shadow-md backdrop-blur-md active:bg-[#F5F3EE]"
               >
-                <Search className="h-3.5 w-3.5 text-[#C84B31]" />
+                <Search className="h-4 w-4 shrink-0 text-[#C84B31]" />
                 <span>Tra cứu</span>
               </button>
               <button
                 type="button"
                 onClick={() => setMobileSheet('collections')}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-[#DED8CC] bg-white/95 px-3 py-2 text-xs font-semibold text-[#1A2229] shadow-md backdrop-blur-md"
+                className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-2xl border border-[#D4CEC2] bg-white/96 px-3 py-2.5 text-xs font-semibold text-[#1A2229] shadow-md backdrop-blur-md active:bg-[#F5F3EE]"
               >
-                <Layers className="h-3.5 w-3.5 text-[#1E6F64]" />
+                <Layers className="h-4 w-4 shrink-0 text-[#1E6F64]" />
                 <span>Bộ huyệt</span>
               </button>
               {selectedPoint && (
                 <button
                   type="button"
                   onClick={() => setMobileSheet('detail')}
-                  className="inline-flex items-center gap-1 rounded-xl bg-[#C84B31] px-3 py-2 font-mono text-xs font-bold text-white shadow-md"
+                  className="inline-flex shrink-0 items-center justify-center gap-1 rounded-2xl bg-[#C84B31] px-3.5 py-2.5 font-mono text-xs font-bold text-white shadow-md active:bg-[#A83B24]"
                 >
                   <span>Huyệt {selectedPoint.code}</span>
                 </button>
@@ -524,16 +521,31 @@ export function App() {
           </aside>
         )}
 
-        {/* Mobile Bottom Drawer */}
+        {/* Mobile Bottom Drawer (explicit height + flex min-h-0 so inner content scrolls reliably on iOS/Android) */}
         {mobileSheet !== 'closed' && (
-          <div className="fixed inset-x-0 bottom-0 z-40 flex max-h-[54dvh] flex-col rounded-t-3xl border-t border-[#DED8CC] bg-white shadow-2xl lg:hidden">
-            {/* Drawer Handle + Header */}
-            <div className="flex shrink-0 items-center justify-between border-b border-[#EFECE4] px-4 py-2.5">
-              <div className="flex items-center gap-2">
+          <div
+            style={{ touchAction: 'pan-y' }}
+            className={`fixed inset-x-0 bottom-0 z-40 flex flex-col rounded-t-3xl border-t border-[#DED8CC] bg-white pb-[env(safe-area-inset-bottom)] shadow-2xl transition-[height] duration-200 lg:hidden ${
+              mobileSheetExpanded ? 'h-[82dvh]' : 'h-[58dvh]'
+            }`}
+          >
+            {/* Drawer Drag Handle */}
+            <button
+              type="button"
+              onClick={() => setMobileSheetExpanded((v) => !v)}
+              aria-label={mobileSheetExpanded ? 'Thu gọn chiều cao bảng' : 'Mở rộng chiều cao bảng'}
+              className="flex w-full shrink-0 items-center justify-center pt-2 pb-1"
+            >
+              <span className="h-1 w-10 rounded-full bg-[#D5CFC2]" />
+            </button>
+
+            {/* Drawer Header */}
+            <div className="flex shrink-0 items-center justify-between border-b border-[#EFECE4] px-4 py-2">
+              <div className="flex items-center gap-1.5">
                 <button
                   type="button"
                   onClick={() => setMobileSheet('search')}
-                  className={`rounded-lg px-2.5 py-1 text-xs font-semibold ${
+                  className={`rounded-lg px-2.5 py-1.5 text-xs font-semibold ${
                     mobileSheet === 'search'
                       ? 'bg-[#1A2229] text-white'
                       : 'text-[#5B6770]'
@@ -544,7 +556,7 @@ export function App() {
                 <button
                   type="button"
                   onClick={() => setMobileSheet('collections')}
-                  className={`rounded-lg px-2.5 py-1 text-xs font-semibold ${
+                  className={`rounded-lg px-2.5 py-1.5 text-xs font-semibold ${
                     mobileSheet === 'collections'
                       ? 'bg-[#1A2229] text-white'
                       : 'text-[#5B6770]'
@@ -556,7 +568,7 @@ export function App() {
                   <button
                     type="button"
                     onClick={() => setMobileSheet('detail')}
-                    className={`rounded-lg px-2.5 py-1 text-xs font-semibold ${
+                    className={`rounded-lg px-2.5 py-1.5 text-xs font-semibold ${
                       mobileSheet === 'detail'
                         ? 'bg-[#C84B31] text-white'
                         : 'text-[#C84B31]'
@@ -567,17 +579,29 @@ export function App() {
                 )}
               </div>
 
-              <button
-                type="button"
-                onClick={() => setMobileSheet('closed')}
-                aria-label="Thu gọn bảng dưới"
-                className="rounded-lg p-1.5 text-[#5B6770] hover:bg-[#F5F3EE]"
-              >
-                <ChevronDown className="h-4 w-4" />
-              </button>
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => setMobileSheetExpanded((v) => !v)}
+                  className="rounded-lg px-2 py-1 text-[11px] font-semibold text-[#5B6770] hover:bg-[#F5F3EE]"
+                >
+                  {mobileSheetExpanded ? 'Thu nhỏ' : 'Mở rộng'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileSheet('closed');
+                    setMobileSheetExpanded(false);
+                  }}
+                  aria-label="Đóng bảng dưới"
+                  className="rounded-lg p-1.5 text-[#5B6770] hover:bg-[#F5F3EE]"
+                >
+                  <ChevronDown className="h-4 w-4" />
+                </button>
+              </div>
             </div>
 
-            <div className="min-h-0 flex-1 overflow-hidden">
+            <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
               {mobileSheet === 'search' && (
                 <SearchSidebar
                   query={searchQuery}

@@ -123,7 +123,7 @@ function getLabelOffset(
   }
 }
 
-export const AcupointLayer: React.FC<AcupointLayerProps> = ({
+export const AcupointLayer: React.FC<AcupointLayerProps> = React.memo(({
   view,
   markers,
   selectedCode,
@@ -228,7 +228,7 @@ export const AcupointLayer: React.FC<AcupointLayerProps> = ({
               y1={seg.y1}
               x2={seg.x2}
               y2={seg.y2}
-              stroke="#1E6F64"
+              stroke="#1B6B46"
               strokeWidth={2 * compensation}
               strokeOpacity={0.38}
               strokeDasharray={`${6 * compensation} ${5 * compensation}`}
@@ -272,7 +272,7 @@ export const AcupointLayer: React.FC<AcupointLayerProps> = ({
         const dotFill = isSelected
           ? '#C63131'
           : inCollection
-            ? '#1E6F64'
+            ? '#1B6B46'
             : isRedMaster
               ? '#C63131'
               : '#1B6B46';
@@ -324,9 +324,9 @@ export const AcupointLayer: React.FC<AcupointLayerProps> = ({
             {inCollection && !isSelected && (
               <circle
                 r="11.5"
-                fill="#1E6F64"
+                fill="#1B6B46"
                 fillOpacity="0.14"
-                stroke="#1E6F64"
+                stroke="#1B6B46"
                 strokeWidth="1.5"
               />
             )}
@@ -355,7 +355,7 @@ export const AcupointLayer: React.FC<AcupointLayerProps> = ({
               <g transform={`translate(${baseRadius + 4}, ${-(baseRadius + 4)})`}>
                 <circle
                   r="7"
-                  fill={isSelected ? '#C63131' : '#1E6F64'}
+                  fill={isSelected ? '#C63131' : '#1B6B46'}
                   stroke="#FFFFFF"
                   strokeWidth="1.3"
                 />
@@ -404,7 +404,7 @@ export const AcupointLayer: React.FC<AcupointLayerProps> = ({
                     dominantBaseline="central"
                     fill={
                       inCollection
-                        ? '#0F5249'
+                        ? '#145235'
                         : isRedMaster
                           ? '#B91C1C'
                           : '#1E293B'
@@ -462,4 +462,4 @@ export const AcupointLayer: React.FC<AcupointLayerProps> = ({
       )}
     </g>
   );
-};
+});

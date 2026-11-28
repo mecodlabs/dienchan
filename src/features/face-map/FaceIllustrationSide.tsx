@@ -8,7 +8,7 @@ import React from 'react';
  *   concha/antihelix bowl, tragus bump & U-shaped intertragic notch at Huyệt 0, earlobe at Huyệt 14)
  * - Clean rear-ear (SAU TAI) reference inset at bottom right
  */
-export const FaceIllustrationSide: React.FC = () => {
+export const FaceIllustrationSide: React.FC = React.memo(() => {
   const ink = '#2E2B7A';
 
   return (
@@ -157,4 +157,4 @@ export const FaceIllustrationSide: React.FC = () => {
       </g>
     </g>
   );
-};
+});

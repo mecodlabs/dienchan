@@ -12,6 +12,7 @@ interface SearchSidebarProps {
   totalCoreCount: number;
   results: Acupoint[];
   selectedCode: string | null;
+  inputRef?: React.RefObject<HTMLInputElement | null>;
   onQueryChange: (query: string) => void;
   onRegionChange: (region: FaceRegion | 'all') => void;
   onDatasetScopeChange: (scope: 'all' | 'core') => void;
@@ -26,6 +27,7 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
   totalCoreCount,
   results,
   selectedCode,
+  inputRef,
   onQueryChange,
   onRegionChange,
   onDatasetScopeChange,
@@ -34,26 +36,31 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
   return (
     <div className="flex h-full min-h-0 flex-col">
       {/* Search Input & Quick Filters */}
-      <div className="shrink-0 space-y-3 border-b border-[#E2DDD3] bg-[#FAF8F4] p-3.5">
+      <div className="shrink-0 space-y-3 border-b border-[#E6E2DA] bg-[#F9F8F6] p-3.5">
         <div className="relative">
           <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-[#5B6770]" />
           <input
+            ref={inputRef}
             type="text"
             value={query}
             onChange={(e) => onQueryChange(e.target.value)}
             placeholder="Tìm số huyệt (19, 26), triệu chứng, tạng phủ..."
             aria-label="Tìm kiếm huyệt Diện Chẩn"
-            className="w-full rounded-xl border border-[#D9D2C5] bg-white py-2 pr-8 pl-9 text-sm text-[#1A2229] placeholder-[#8A949C] shadow-2xs transition focus:border-[#1E6F64] focus:ring-2 focus:ring-[#1E6F64]/15 focus:outline-none"
+            className="w-full rounded-xl border border-[#DDD8CE] bg-white py-2 pr-9 pl-9 text-sm text-[#1A2229] placeholder-[#8A949C] shadow-2xs transition focus:border-[#1B6B46] focus:ring-2 focus:ring-[#1B6B46]/15 focus:outline-none"
           />
-          {query && (
+          {query ? (
             <button
               type="button"
               onClick={() => onQueryChange('')}
               aria-label="Xóa từ khóa"
-              className="absolute top-1/2 right-2.5 -translate-y-1/2 rounded-md p-0.5 text-[#5B6770] hover:bg-[#F0ECE3] hover:text-[#1A2229]"
+              className="absolute top-1/2 right-2.5 -translate-y-1/2 rounded-md p-0.5 text-[#5B6770] hover:bg-[#F1EFEA] hover:text-[#1A2229]"
             >
               <X className="h-3.5 w-3.5" />
             </button>
+          ) : (
+            <kbd className="pointer-events-none absolute top-1/2 right-2.5 hidden -translate-y-1/2 items-center rounded border border-[#E2DDD5] bg-[#F9F8F6] px-1.5 py-0.5 font-mono text-[10px] font-semibold text-[#7A858E] lg:inline-flex">
+              /
+            </kbd>
           )}
         </div>
 
@@ -68,8 +75,8 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
                 onClick={() => onQueryChange(isActive ? '' : chip)}
                 className={`inline-flex items-center gap-1 rounded-lg border px-2 py-1 text-[11px] font-medium transition ${
                   isActive
-                    ? 'border-[#1E6F64] bg-[#1E6F64] text-white'
-                    : 'border-[#E2DDD3] bg-white text-[#4E5961] hover:border-[#1E6F64]/50 hover:text-[#1E6F64]'
+                    ? 'border-[#1B6B46] bg-[#1B6B46] text-white'
+                    : 'border-[#E6E2DA] bg-white text-[#4E5961] hover:border-[#1B6B46]/50 hover:text-[#1B6B46]'
                 }`}
               >
                 <Sparkles className="h-2.5 w-2.5 opacity-75" />
@@ -91,7 +98,7 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
                 className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-semibold transition ${
                   isActive
                     ? 'bg-[#1A2229] text-white'
-                    : 'bg-[#ECE7DD] text-[#5B6770] hover:bg-[#E2DDD3] hover:text-[#1A2229]'
+                    : 'bg-[#EFECE7] text-[#5B6770] hover:bg-[#E6E2DA] hover:text-[#1A2229]'
                 }`}
               >
                 {item.label}
@@ -102,8 +109,8 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
       </div>
 
       {/* Result Count & Dataset Scope Bar */}
-      <div className="flex shrink-0 items-center justify-between gap-2 border-b border-[#EFECE4] bg-white px-3.5 py-2 text-xs text-[#5B6770]">
-        <div className="inline-flex rounded-lg bg-[#F2EFE8] p-0.5">
+      <div className="flex shrink-0 items-center justify-between gap-2 border-b border-[#EEECF0] bg-white px-3.5 py-2 text-xs text-[#5B6770]">
+        <div className="inline-flex rounded-lg bg-[#F2F0EC] p-0.5">
           <button
             type="button"
             onClick={() => onDatasetScopeChange('all')}
@@ -139,7 +146,7 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
                 onQueryChange('');
                 onRegionChange('all');
               }}
-              className="font-medium text-[#C84B31] hover:underline"
+              className="font-medium text-[#C63131] hover:underline"
             >
               Xóa lọc
             </button>
@@ -154,7 +161,7 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
       >
         {results.length === 0 ? (
           <div className="flex flex-col items-center justify-center px-4 py-12 text-center">
-            <div className="mb-2 rounded-full bg-[#F5F3EE] p-3 text-[#8A949C]">
+            <div className="mb-2 rounded-full bg-[#F9F8F6] p-3 text-[#8A949C]">
               <Search className="h-5 w-5" />
             </div>
             <p className="text-sm font-semibold text-[#1A2229]">Không tìm thấy huyệt phù hợp</p>
@@ -177,16 +184,16 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
                     onClick={() => onSelectPoint(point)}
                     className={`group w-full rounded-xl border p-2.5 text-left transition ${
                       isSelected
-                        ? 'border-[#C84B31] bg-[#C84B31]/6 shadow-2xs'
-                        : 'border-transparent bg-[#FAF8F4]/75 hover:border-[#DED8CC] hover:bg-[#FAF8F4]'
+                        ? 'border-[#C63131] bg-[#C63131]/6 shadow-2xs'
+                        : 'border-transparent bg-[#F9F8F6]/75 hover:border-[#E2DDD5] hover:bg-[#F9F8F6]'
                     }`}
                   >
                     <div className="flex items-start gap-2.5">
                       <span
                         className={`flex h-9 min-w-[40px] shrink-0 items-center justify-center rounded-lg px-1.5 font-mono text-sm font-bold transition ${
                           isSelected
-                            ? 'bg-[#C84B31] text-white'
-                            : 'border border-[#DED8CC] bg-white text-[#1A2229] group-hover:border-[#1E6F64] group-hover:text-[#1E6F64]'
+                            ? 'bg-[#C63131] text-white'
+                            : 'border border-[#E2DDD5] bg-white text-[#1A2229] group-hover:border-[#1B6B46] group-hover:text-[#1B6B46]'
                         }`}
                       >
                         {point.code}
@@ -206,14 +213,14 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
                         </div>
 
                         <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-[11px]">
-                          <span className="rounded bg-[#ECE7DD] px-1.5 py-0.5 font-medium text-[#4E5961]">
+                          <span className="rounded bg-[#EFECE7] px-1.5 py-0.5 font-medium text-[#4E5961]">
                             {point.regionLabel}
                           </span>
                           <span
                             className={`rounded px-1.5 py-0.5 font-medium ${
                               isUnilateral
                                 ? 'bg-amber-100 text-amber-800'
-                                : 'bg-[#1E6F64]/10 text-[#1E6F64]'
+                                : 'bg-[#1B6B46]/10 text-[#1B6B46]'
                             }`}
                           >
                             {formatLateralityLabel(point.laterality)}

@@ -15,7 +15,7 @@ interface GridOverlayProps {
  *   L K H G E D C B A · O · A B C D E G H K L (O & G crimson) on Front view
  *   L M N P Q (M & Q crimson) on Side view
  */
-export const GridOverlay: React.FC<GridOverlayProps> = ({ lines, view, visible }) => {
+export const GridOverlay: React.FC<GridOverlayProps> = React.memo(({ lines, view, visible }) => {
   if (!visible) return null;
 
   const verticalTop = 160;
@@ -152,4 +152,4 @@ export const GridOverlay: React.FC<GridOverlayProps> = ({ lines, view, visible }
       )}
     </g>
   );
-};
+});

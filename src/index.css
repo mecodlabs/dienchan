@@ -4,14 +4,14 @@
   --font-sans: "Be Vietnam Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  --color-paper: #F5F3EE;
+  --color-paper: #F9F8F6;
   --color-card: #FFFFFF;
   --color-ink: #1A2229;
-  --color-ink-muted: #5B6770;
-  --color-accent: #C84B31;
-  --color-jade: #1E6F64;
+  --color-ink-muted: #5B656E;
+  --color-accent: #C63131;
+  --color-jade: #1B6B46;
   --color-amber-warn: #B45309;
-  --color-hairline: #E2DDD3;
+  --color-hairline: #E6E2DA;
 }
 
 @layer base {
@@ -45,6 +45,12 @@
   transform-box: fill-box;
   transform-origin: center;
   animation: acupoint-pulse 2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .acupoint-pulse-ring {
+    animation: none;
+  }
 }
 
 /* Custom sleek scrollbars for clinical sidebars */

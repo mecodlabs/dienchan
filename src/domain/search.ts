@@ -32,7 +32,32 @@ export function normalizeVietnamese(text: string): string {
     .trim();
 }
 
-function getSearchRank(point: Acupoint, rawQuery: string, tokens: string[]): number {
+/**
+ * Compares acupoint codes naturally by numeric prefix first (e.g., 22 < 22B < 23).
+ */
+export function compareAcupointCode(a: string, b: string): number {
+  const na = parseInt(a, 10);
+  const nb = parseInt(b, 10);
+  if (!Number.isNaN(na) && !Number.isNaN(nb) && na !== nb) {
+    return na - nb;
+  }
+  return a.localeCompare(b);
+}
+
+interface IndexedAcupoint {
+  codeNorm: string;
+  nameNorm: string;
+  regionNorm: string;
+  organNorm: string;
+  combined: string;
+}
+
+const searchIndexCache = new WeakMap<Acupoint, IndexedAcupoint>();
+
+function getIndexedAcupoint(point: Acupoint): IndexedAcupoint {
+  const cached = searchIndexCache.get(point);
+  if (cached) return cached;
+
   const codeNorm = normalizeVietnamese(point.code);
   const nameNorm = normalizeVietnamese(point.name);
   const regionNorm = normalizeVietnamese(point.regionLabel);
@@ -41,7 +66,19 @@ function getSearchRank(point: Acupoint, rawQuery: string, tokens: string[]): num
   const locateNorm = normalizeVietnamese(point.howToLocate);
   const gridNorm = normalizeVietnamese(`${point.gridRef.vertical} ${point.gridRef.horizontal}`);
 
-  const combined = `${codeNorm} ${nameNorm} ${regionNorm} ${organNorm} ${indicationsNorm} ${locateNorm} ${gridNorm}`;
+  const indexed: IndexedAcupoint = {
+    codeNorm,
+    nameNorm,
+    regionNorm,
+    organNorm,
+    combined: `${codeNorm} ${nameNorm} ${regionNorm} ${organNorm} ${indicationsNorm} ${locateNorm} ${gridNorm}`,
+  };
+  searchIndexCache.set(point, indexed);
+  return indexed;
+}
+
+function getSearchRank(point: Acupoint, rawQuery: string, tokens: string[]): number {
+  const { codeNorm, nameNorm, regionNorm, organNorm, combined } = getIndexedAcupoint(point);
 
   // Every query token must match somewhere
   for (const token of tokens) {
@@ -78,7 +115,7 @@ export function searchAcupoints(
 
   const normalizedQuery = normalizeVietnamese(query);
   if (!normalizedQuery) {
-    return [...regionFiltered].sort((a, b) => Number(a.code) - Number(b.code));
+    return [...regionFiltered].sort((a, b) => compareAcupointCode(a.code, b.code));
   }
 
   const tokens = normalizedQuery.split(/\s+/).filter(Boolean);
@@ -93,7 +130,7 @@ export function searchAcupoints(
 
   scored.sort((a, b) => {
     if (a.rank !== b.rank) return a.rank - b.rank;
-    return Number(a.point.code) - Number(b.point.code);
+    return compareAcupointCode(a.point.code, b.point.code);
   });
 
   return scored.map((entry) => entry.point);

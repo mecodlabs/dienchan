@@ -7,7 +7,11 @@ import {
 } from '@/data/acupointRepository';
 import { parseImportedCollectionsJson } from '@/data/collectionStorage';
 import { getFocusTarget, MAP_WIDTH, projectAcupointsForView } from '@/domain/projection';
-import { normalizeVietnamese, searchAcupoints } from '@/domain/search';
+import {
+  compareAcupointCode,
+  normalizeVietnamese,
+  searchAcupoints,
+} from '@/domain/search';
 import {
   clampTransform,
   computeFlyToTransform,
@@ -42,6 +46,18 @@ describe('Vietnamese accent-insensitive search & ranking', () => {
     const nosePoints = searchAcupoints(CORE_ACUPOINTS, '', 'nose');
     expect(nosePoints.every((p) => p.region === 'nose')).toBe(true);
     expect(nosePoints.some((p) => p.code === '43')).toBe(true);
+  });
+
+  it('sorts alphanumeric acupoint codes naturally (22 < 22B < 23 and 63 < 63M < 64)', () => {
+    const sorted = ['64', '23', '63M', '22B', '63', '22'].sort(compareAcupointCode);
+    expect(sorted).toEqual(['22', '22B', '23', '63', '63M', '64']);
+
+    const allSorted = searchAcupoints(ALL_ACUPOINTS, '');
+    const codes = allSorted.map((p) => p.code);
+    expect(codes.indexOf('22')).toBeLessThan(codes.indexOf('22B'));
+    expect(codes.indexOf('22B')).toBeLessThan(codes.indexOf('23'));
+    expect(codes.indexOf('63')).toBeLessThan(codes.indexOf('63M'));
+    expect(codes.indexOf('63M')).toBeLessThan(codes.indexOf('64'));
   });
 });
 

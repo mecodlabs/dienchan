@@ -75,6 +75,7 @@ export const FaceMapViewport = React.forwardRef<FaceMapViewportHandle, FaceMapVi
 
     const animFrameRef = React.useRef<number | null>(null);
     const hasInteractedRef = React.useRef(false);
+    const lastReportedScalePctRef = React.useRef<number>(Math.round(0.75 * 100));
     const [isDragging, setIsDragging] = React.useState(false);
 
     // Track active pointers for smooth mouse drag & two-finger pinch/pan
@@ -106,7 +107,11 @@ export const FaceMapViewport = React.forwardRef<FaceMapViewportHandle, FaceMapVi
       (next: ViewportTransform) => {
         transformRef.current = next;
         setTransform(next);
-        onScaleChange(next.scale);
+        const pct = Math.round(next.scale * 100);
+        if (pct !== lastReportedScalePctRef.current) {
+          lastReportedScalePctRef.current = pct;
+          onScaleChange(next.scale);
+        }
       },
       [onScaleChange]
     );
@@ -398,6 +403,7 @@ export const FaceMapViewport = React.forwardRef<FaceMapViewportHandle, FaceMapVi
     };
 
     const handleDoubleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+      if ((e.target as Element).closest('[role="button"]') !== null) return;
       const el = containerRef.current;
       if (!el) return;
       hasInteractedRef.current = true;

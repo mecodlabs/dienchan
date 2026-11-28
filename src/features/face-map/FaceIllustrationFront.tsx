@@ -8,7 +8,7 @@ import React from 'react';
  * - Unfilled concentric-ring eyes centered at G × 5 (356/644, 486)
  * - Classic bottom-right sub-nasal inset (173 – 143 – 19)
  */
-export const FaceIllustrationFront: React.FC = () => {
+export const FaceIllustrationFront: React.FC = React.memo(() => {
   const ink = '#2E2B7A';
 
   return (
@@ -227,4 +227,4 @@ export const FaceIllustrationFront: React.FC = () => {
       </g>
     </g>
   );
-};
+});

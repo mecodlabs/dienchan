@@ -38,6 +38,22 @@ interface CollectionsPanelProps {
 
 const PREVIEW_CHIP_LIMIT = 12;
 
+function getCardClassName(isActive: boolean, inactiveBg: 'white' | 'warm' = 'white'): string {
+  if (isActive) {
+    return 'cursor-pointer rounded-xl border-2 border-[#145235] bg-[#1B6B46]/15 p-3 shadow-sm ring-1 ring-[#1B6B46]/20 transition-all';
+  }
+  return inactiveBg === 'warm'
+    ? 'cursor-pointer rounded-xl border border-[#E6E2DA] bg-[#F9F8F6]/70 p-3 transition-all hover:border-[#BEB5A4] hover:bg-[#F9F8F6]'
+    : 'cursor-pointer rounded-xl border border-[#E6E2DA] bg-white p-3 transition-all hover:border-[#BEB5A4] hover:bg-[#F9F8F6]/70';
+}
+
+const ActiveBadge: React.FC = () => (
+  <span className="inline-flex items-center gap-1 rounded-full bg-[#145235] px-2 py-0.5 text-[10px] font-bold text-white shadow-2xs">
+    <Check className="h-3 w-3 stroke-[3]" />
+    <span>Đang chọn</span>
+  </span>
+);
+
 export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
   userCollections,
   builtinProtocols,
@@ -60,6 +76,7 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
   const [editingId, setEditingId] = React.useState<string | null>(null);
   const [editName, setEditName] = React.useState('');
   const [managingId, setManagingId] = React.useState<string | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = React.useState<string | null>(null);
   const [statusNotice, setStatusNotice] = React.useState<{
     type: 'success' | 'error';
     text: string;
@@ -106,12 +123,12 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
       className="custom-scrollbar flex h-full min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain bg-white"
     >
       {/* Top Action Strip: Create / Export / Import */}
-      <div className="shrink-0 space-y-2.5 border-b border-[#E2DDD3] bg-[#FAF8F4] p-3.5">
+      <div className="shrink-0 space-y-2.5 border-b border-[#E6E2DA] bg-[#F9F8F6] p-3.5">
         <div className="flex items-center justify-between gap-2">
           <button
             type="button"
             onClick={() => setIsCreating((v) => !v)}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-[#1E6F64] px-3 py-1.5 text-xs font-semibold text-white shadow-2xs transition hover:bg-[#17584F]"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-[#1B6B46] px-3 py-1.5 text-xs font-semibold text-white shadow-2xs transition hover:bg-[#155739]"
           >
             <FolderPlus className="h-3.5 w-3.5" />
             <span>Tạo danh sách mới</span>
@@ -122,7 +139,7 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
               type="button"
               onClick={onExportJson}
               title="Xuất danh sách cá nhân ra tệp JSON"
-              className="inline-flex items-center gap-1 rounded-lg border border-[#D9D2C5] bg-white px-2 py-1.5 text-[11px] font-semibold text-[#1A2229] transition hover:bg-[#F5F3EE]"
+              className="inline-flex items-center gap-1 rounded-lg border border-[#DDD8CE] bg-white px-2 py-1.5 text-[11px] font-semibold text-[#1A2229] transition hover:bg-[#F9F8F6]"
             >
               <Download className="h-3.5 w-3.5 text-[#5B6770]" />
               <span>Xuất</span>
@@ -131,7 +148,7 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
               type="button"
               onClick={() => fileInputRef.current?.click()}
               title="Nhập danh sách từ tệp JSON"
-              className="inline-flex items-center gap-1 rounded-lg border border-[#D9D2C5] bg-white px-2 py-1.5 text-[11px] font-semibold text-[#1A2229] transition hover:bg-[#F5F3EE]"
+              className="inline-flex items-center gap-1 rounded-lg border border-[#DDD8CE] bg-white px-2 py-1.5 text-[11px] font-semibold text-[#1A2229] transition hover:bg-[#F9F8F6]"
             >
               <Upload className="h-3.5 w-3.5 text-[#5B6770]" />
               <span>Nhập</span>
@@ -149,7 +166,7 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
         {isCreating && (
           <form
             onSubmit={handleCreateSubmit}
-            className="space-y-2 rounded-xl border border-[#1E6F64]/30 bg-white p-2.5 shadow-2xs"
+            className="space-y-2 rounded-xl border border-[#1B6B46]/30 bg-white p-2.5 shadow-2xs"
           >
             <input
               type="text"
@@ -157,27 +174,27 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
               onChange={(e) => setNewName(e.target.value)}
               placeholder="Tên danh sách (vd: Huyệt mất ngủ của tôi)"
               autoFocus
-              className="w-full rounded-lg border border-[#DED8CC] px-2.5 py-1.5 text-xs text-[#1A2229] focus:border-[#1E6F64] focus:outline-none"
+              className="w-full rounded-lg border border-[#E2DDD5] px-2.5 py-1.5 text-xs text-[#1A2229] focus:border-[#1B6B46] focus:outline-none"
             />
             <input
               type="text"
               value={newDesc}
               onChange={(e) => setNewDesc(e.target.value)}
               placeholder="Ghi chú ngắn (tùy chọn)"
-              className="w-full rounded-lg border border-[#DED8CC] px-2.5 py-1.5 text-xs text-[#1A2229] focus:border-[#1E6F64] focus:outline-none"
+              className="w-full rounded-lg border border-[#E2DDD5] px-2.5 py-1.5 text-xs text-[#1A2229] focus:border-[#1B6B46] focus:outline-none"
             />
             <div className="flex items-center justify-end gap-1.5">
               <button
                 type="button"
                 onClick={() => setIsCreating(false)}
-                className="rounded-lg px-2.5 py-1 text-xs font-medium text-[#5B6770] hover:bg-[#F5F3EE]"
+                className="rounded-lg px-2.5 py-1 text-xs font-medium text-[#5B6770] hover:bg-[#F9F8F6]"
               >
                 Hủy
               </button>
               <button
                 type="submit"
                 disabled={!newName.trim()}
-                className="rounded-lg bg-[#1E6F64] px-3 py-1 text-xs font-semibold text-white hover:bg-[#17584F] disabled:opacity-40"
+                className="rounded-lg bg-[#1B6B46] px-3 py-1 text-xs font-semibold text-white hover:bg-[#155739] disabled:opacity-40"
               >
                 Lưu danh sách
               </button>
@@ -221,54 +238,45 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
                 }
               }}
               aria-pressed={isActive}
-              className={`cursor-pointer rounded-xl p-3 transition-all ${
-                isActive
-                  ? 'border-2 border-[#0F5249] bg-[#1E6F64]/15 shadow-sm ring-1 ring-[#1E6F64]/20'
-                  : 'border border-[#E2DDD3] bg-white hover:border-[#BEB5A4] hover:bg-[#FAF8F4]/70'
-              }`}
+              className={getCardClassName(isActive, 'white')}
             >
               <div className="flex flex-wrap items-center gap-1.5">
                 <Layers
                   className={`h-3.5 w-3.5 shrink-0 ${
-                    isActive ? 'text-[#0F5249]' : 'text-[#5B6770]'
+                    isActive ? 'text-[#145235]' : 'text-[#5B6770]'
                   }`}
                 />
                 <span
                   className={`text-sm font-bold ${
-                    isActive ? 'text-[#0B3D36]' : 'text-[#1A2229]'
+                    isActive ? 'text-[#0F3D27]' : 'text-[#1A2229]'
                   }`}
                 >
                   {fullAtlasCollection.name}
                 </span>
-                {isActive && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-[#0F5249] px-2 py-0.5 text-[10px] font-bold text-white shadow-2xs">
-                    <Check className="h-3 w-3 stroke-[3]" />
-                    <span>Đang chọn</span>
-                  </span>
-                )}
+                {isActive && <ActiveBadge />}
               </div>
               <p
                 className={`mt-1 text-xs leading-relaxed ${
-                  isActive ? 'text-[#1F4B44]' : 'text-[#5B6770]'
+                  isActive ? 'text-[#1B4332]' : 'text-[#5B6770]'
                 }`}
               >
                 {fullAtlasCollection.description}
               </p>
               <div
                 className={`mt-2.5 flex items-center justify-between border-t pt-2 ${
-                  isActive ? 'border-[#0F5249]/20' : 'border-[#EFECE4]'
+                  isActive ? 'border-[#145235]/20' : 'border-[#EEECF0]'
                 }`}
               >
                 <span
                   className={`font-mono text-[11px] font-semibold ${
-                    isActive ? 'text-[#0F5249]' : 'text-[#5B6770]'
+                    isActive ? 'text-[#145235]' : 'text-[#5B6770]'
                   }`}
                 >
                   {fullAtlasCollection.pointCodes.length} huyệt
                 </span>
                 <span
                   className={`text-[11px] font-medium ${
-                    isActive ? 'text-[#0F5249]' : 'text-[#7A858E]'
+                    isActive ? 'text-[#145235]' : 'text-[#7A858E]'
                   }`}
                 >
                   Mặc định
@@ -288,7 +296,7 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
         </div>
 
         {userCollections.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-[#DED8CC] p-3 text-center text-xs text-[#5B6770]">
+          <p className="rounded-xl border border-dashed border-[#E2DDD5] p-3 text-center text-xs text-[#5B6770]">
             Chưa có danh sách riêng. Nhấn “Tạo danh sách mới” hoặc nhân bản từ phác đồ bên dưới.
           </p>
         ) : (
@@ -297,27 +305,26 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
               const isActive = activeCollectionId === col.id;
               const isManaging = managingId === col.id;
               const isEditingName = editingId === col.id;
+              const isConfirmingDelete = confirmDeleteId === col.id;
 
               return (
                 <div
                   key={col.id}
                   onClick={() => {
-                    if (!isEditingName) onActivateCollection(col);
+                    if (!isEditingName && !isConfirmingDelete) {
+                      onActivateCollection(col);
+                    }
                   }}
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => {
-                    if (!isEditingName && (e.key === 'Enter' || e.key === ' ')) {
+                    if (!isEditingName && !isConfirmingDelete && (e.key === 'Enter' || e.key === ' ')) {
                       e.preventDefault();
                       onActivateCollection(col);
                     }
                   }}
                   aria-pressed={isActive}
-                  className={`cursor-pointer rounded-xl p-3 transition-all ${
-                    isActive
-                      ? 'border-2 border-[#0F5249] bg-[#1E6F64]/15 shadow-sm ring-1 ring-[#1E6F64]/20'
-                      : 'border border-[#E2DDD3] bg-[#FAF8F4]/70 hover:border-[#BEB5A4] hover:bg-[#FAF8F4]'
-                  }`}
+                  className={getCardClassName(isActive, 'warm')}
                 >
                   <div className="flex items-start justify-between gap-2">
                     {isEditingName ? (
@@ -337,11 +344,11 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
                           value={editName}
                           onChange={(e) => setEditName(e.target.value)}
                           autoFocus
-                          className="w-full rounded-md border border-[#1E6F64] bg-white px-2 py-1 text-xs font-semibold focus:outline-none"
+                          className="w-full rounded-md border border-[#1B6B46] bg-white px-2 py-1 text-xs font-semibold focus:outline-none"
                         />
                         <button
                           type="submit"
-                          className="rounded-md bg-[#1E6F64] px-2 py-1 text-[11px] font-semibold text-white"
+                          className="rounded-md bg-[#1B6B46] px-2 py-1 text-[11px] font-semibold text-white"
                         >
                           Lưu
                         </button>
@@ -351,27 +358,22 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
                         <div className="flex flex-wrap items-center gap-1.5">
                           <Layers
                             className={`h-3.5 w-3.5 shrink-0 ${
-                              isActive ? 'text-[#0F5249]' : 'text-[#5B6770]'
+                              isActive ? 'text-[#145235]' : 'text-[#5B6770]'
                             }`}
                           />
                           <span
                             className={`truncate text-sm font-bold ${
-                              isActive ? 'text-[#0B3D36]' : 'text-[#1A2229]'
+                              isActive ? 'text-[#0F3D27]' : 'text-[#1A2229]'
                             }`}
                           >
                             {col.name}
                           </span>
-                          {isActive && (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-[#0F5249] px-2 py-0.5 text-[10px] font-bold text-white shadow-2xs">
-                              <Check className="h-3 w-3 stroke-[3]" />
-                              <span>Đang chọn</span>
-                            </span>
-                          )}
+                          {isActive && <ActiveBadge />}
                         </div>
                         {col.description && (
                           <p
                             className={`mt-1 line-clamp-2 text-xs ${
-                              isActive ? 'text-[#1F4B44]' : 'text-[#5B6770]'
+                              isActive ? 'text-[#1B4332]' : 'text-[#5B6770]'
                             }`}
                           >
                             {col.description}
@@ -384,37 +386,68 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
                       className="flex shrink-0 items-center gap-1"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <button
-                        type="button"
-                        title="Đổi tên"
-                        onClick={() => {
-                          setEditingId(col.id);
-                          setEditName(col.name);
-                        }}
-                        className="rounded-md p-1 text-[#5B6770] hover:bg-white hover:text-[#1A2229]"
-                      >
-                        <Pencil className="h-3.5 w-3.5" />
-                      </button>
-                      <button
-                        type="button"
-                        title="Sắp xếp / Xóa bớt huyệt"
-                        onClick={() => setManagingId(isManaging ? null : col.id)}
-                        className={`rounded-md px-1.5 py-0.5 text-[11px] font-semibold transition ${
-                          isManaging
-                            ? 'bg-[#1A2229] text-white'
-                            : 'text-[#5B6770] hover:bg-white hover:text-[#1A2229]'
-                        }`}
-                      >
-                        {isManaging ? 'Xong' : 'Sửa'}
-                      </button>
-                      <button
-                        type="button"
-                        title="Xóa danh sách"
-                        onClick={() => onDeleteCollection(col.id)}
-                        className="rounded-md p-1 text-[#5B6770] hover:bg-red-50 hover:text-[#C84B31]"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </button>
+                      {isConfirmingDelete ? (
+                        <div className="flex items-center gap-1 rounded-lg border border-red-200 bg-red-50 px-1.5 py-0.5">
+                          <span className="text-[11px] font-semibold text-red-700">Xóa?</span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setConfirmDeleteId(null);
+                              onDeleteCollection(col.id);
+                            }}
+                            className="rounded bg-[#C63131] px-1.5 py-0.5 text-[11px] font-semibold text-white hover:bg-[#A62424]"
+                          >
+                            Xóa
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setConfirmDeleteId(null)}
+                            className="rounded px-1.5 py-0.5 text-[11px] font-medium text-[#5B6770] hover:bg-white"
+                          >
+                            Hủy
+                          </button>
+                        </div>
+                      ) : (
+                        <>
+                          <button
+                            type="button"
+                            title="Đổi tên"
+                            aria-label={`Đổi tên ${col.name}`}
+                            onClick={() => {
+                              setEditingId(col.id);
+                              setEditName(col.name);
+                              setConfirmDeleteId(null);
+                            }}
+                            className="rounded-md p-1 text-[#5B6770] hover:bg-white hover:text-[#1A2229]"
+                          >
+                            <Pencil className="h-3.5 w-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            title="Sắp xếp / Xóa bớt huyệt"
+                            onClick={() => {
+                              setManagingId(isManaging ? null : col.id);
+                              setConfirmDeleteId(null);
+                            }}
+                            className={`rounded-md px-1.5 py-0.5 text-[11px] font-semibold transition ${
+                              isManaging
+                                ? 'bg-[#1A2229] text-white'
+                                : 'text-[#5B6770] hover:bg-white hover:text-[#1A2229]'
+                            }`}
+                          >
+                            {isManaging ? 'Xong' : 'Sửa'}
+                          </button>
+                          <button
+                            type="button"
+                            title="Xóa danh sách"
+                            aria-label={`Xóa ${col.name}`}
+                            onClick={() => setConfirmDeleteId(col.id)}
+                            className="rounded-md p-1 text-[#5B6770] hover:bg-red-50 hover:text-[#C63131]"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
+                        </>
+                      )}
                     </div>
                   </div>
 
@@ -433,10 +466,10 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
                             onClick={(e) => e.stopPropagation()}
                             className={`inline-flex items-center rounded-lg border text-xs font-semibold transition ${
                               isPointSelected
-                                ? 'border-[#C84B31] bg-[#C84B31] text-white'
+                                ? 'border-[#C63131] bg-[#C63131] text-white'
                                 : isActive
-                                  ? 'border-[#0F5249]/35 bg-white text-[#0B3D36]'
-                                  : 'border-[#D9D2C5] bg-white text-[#1A2229]'
+                                  ? 'border-[#145235]/35 bg-white text-[#0F3D27]'
+                                  : 'border-[#DDD8CE] bg-white text-[#1A2229]'
                             }`}
                           >
                             {isManaging && idx > 0 && (
@@ -474,7 +507,7 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
                                 type="button"
                                 onClick={() => onRemovePointFromCollection(col.id, code)}
                                 title={`Bỏ huyệt ${code}`}
-                                className="border-l border-current/15 px-1.5 py-0.5 hover:text-[#C84B31]"
+                                className="border-l border-current/15 px-1.5 py-0.5 hover:text-[#C63131]"
                               >
                                 <X className="h-3 w-3" />
                               </button>
@@ -487,12 +520,12 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
 
                   <div
                     className={`mt-2.5 flex items-center justify-between border-t pt-2 ${
-                      isActive ? 'border-[#0F5249]/20' : 'border-[#E2DDD3]/70'
+                      isActive ? 'border-[#145235]/20' : 'border-[#E6E2DA]/70'
                     }`}
                   >
                     <span
                       className={`font-mono text-[11px] font-semibold ${
-                        isActive ? 'text-[#0F5249]' : 'text-[#5B6770]'
+                        isActive ? 'text-[#145235]' : 'text-[#5B6770]'
                       }`}
                     >
                       {col.pointCodes.length} huyệt
@@ -506,7 +539,7 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
       </div>
 
       {/* Section 3: Built-in Core Protocols */}
-      <div className="space-y-2.5 border-t border-[#E2DDD3] p-3.5">
+      <div className="space-y-2.5 border-t border-[#E6E2DA] p-3.5">
         <h3 className="text-[11px] font-bold tracking-wider text-[#5B6770] uppercase">
           Phác đồ cơ bản tích hợp ({coreProtocols.length})
         </h3>
@@ -533,37 +566,28 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
                   }
                 }}
                 aria-pressed={isActive}
-                className={`cursor-pointer rounded-xl p-3 transition-all ${
-                  isActive
-                    ? 'border-2 border-[#0F5249] bg-[#1E6F64]/15 shadow-sm ring-1 ring-[#1E6F64]/20'
-                    : 'border border-[#E2DDD3] bg-white hover:border-[#BEB5A4] hover:bg-[#FAF8F4]/70'
-                }`}
+                className={getCardClassName(isActive, 'white')}
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0 flex-1 text-left">
                     <div className="flex flex-wrap items-center gap-1.5">
                       <Layers
                         className={`h-3.5 w-3.5 shrink-0 ${
-                          isActive ? 'text-[#0F5249]' : 'text-[#5B6770]'
+                          isActive ? 'text-[#145235]' : 'text-[#5B6770]'
                         }`}
                       />
                       <span
                         className={`text-sm font-bold ${
-                          isActive ? 'text-[#0B3D36]' : 'text-[#1A2229]'
+                          isActive ? 'text-[#0F3D27]' : 'text-[#1A2229]'
                         }`}
                       >
                         {proto.name}
                       </span>
-                      {isActive && (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-[#0F5249] px-2 py-0.5 text-[10px] font-bold text-white shadow-2xs">
-                          <Check className="h-3 w-3 stroke-[3]" />
-                          <span>Đang chọn</span>
-                        </span>
-                      )}
+                      {isActive && <ActiveBadge />}
                     </div>
                     <p
                       className={`mt-1 text-xs leading-relaxed ${
-                        isActive ? 'text-[#1F4B44]' : 'text-[#5B6770]'
+                        isActive ? 'text-[#1B4332]' : 'text-[#5B6770]'
                       }`}
                     >
                       {proto.description}
@@ -579,8 +603,8 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
                     title="Lưu thành danh sách riêng để tùy chỉnh"
                     className={`shrink-0 rounded-lg border p-1.5 transition ${
                       isActive
-                        ? 'border-[#0F5249]/35 bg-white/80 text-[#0F5249] hover:bg-white'
-                        : 'border-[#E2DDD3] bg-white text-[#5B6770] hover:border-[#1E6F64] hover:text-[#1E6F64]'
+                        ? 'border-[#145235]/35 bg-white/80 text-[#145235] hover:bg-white'
+                        : 'border-[#E6E2DA] bg-white text-[#5B6770] hover:border-[#1B6B46] hover:text-[#1B6B46]'
                     }`}
                   >
                     <Copy className="h-3.5 w-3.5" />
@@ -601,10 +625,10 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
                         }}
                         className={`rounded-lg border px-2 py-0.5 font-mono text-xs font-semibold transition ${
                           isPointSelected
-                            ? 'border-[#C84B31] bg-[#C84B31] text-white'
+                            ? 'border-[#C63131] bg-[#C63131] text-white'
                             : isActive
-                              ? 'border-[#0F5249]/35 bg-white text-[#0B3D36] hover:border-[#0F5249]'
-                              : 'border-[#E2DDD3] bg-[#FAF8F4] text-[#1A2229] hover:border-[#1E6F64]'
+                              ? 'border-[#145235]/35 bg-white text-[#0F3D27] hover:border-[#145235]'
+                              : 'border-[#E6E2DA] bg-[#F9F8F6] text-[#1A2229] hover:border-[#1B6B46]'
                         }`}
                       >
                         {code}
@@ -615,8 +639,8 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
                     <span
                       className={`inline-flex items-center rounded-lg px-2 py-0.5 font-mono text-[11px] font-semibold ${
                         isActive
-                          ? 'bg-[#0F5249]/15 text-[#0B3D36]'
-                          : 'bg-[#F0ECE4] text-[#5B6770]'
+                          ? 'bg-[#145235]/15 text-[#0F3D27]'
+                          : 'bg-[#F1EFEA] text-[#5B6770]'
                       }`}
                     >
                       +{hiddenCount} huyệt
@@ -626,12 +650,12 @@ export const CollectionsPanel: React.FC<CollectionsPanelProps> = ({
 
                 <div
                   className={`mt-2.5 flex items-center justify-between border-t pt-2 ${
-                    isActive ? 'border-[#0F5249]/20' : 'border-[#EFECE4]'
+                    isActive ? 'border-[#145235]/20' : 'border-[#EEECF0]'
                   }`}
                 >
                   <span
                     className={`font-mono text-[11px] font-semibold ${
-                      isActive ? 'text-[#0F5249]' : 'text-[#5B6770]'
+                      isActive ? 'text-[#145235]' : 'text-[#5B6770]'
                     }`}
                   >
                     {proto.pointCodes.length} huyệt

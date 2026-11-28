@@ -7,9 +7,12 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
 }
 
+export type IosBrowserKind = 'safari' | 'chrome' | 'other';
+
 export interface PwaInstallState {
   isStandalone: boolean;
   isIos: boolean;
+  iosBrowser: IosBrowserKind;
   isInAppBrowser: boolean;
   canNativeInstall: boolean;
   showAutoBanner: boolean;
@@ -23,6 +26,7 @@ export interface PwaInstallState {
 function detectEnvironment(): {
   isStandalone: boolean;
   isIos: boolean;
+  iosBrowser: IosBrowserKind;
   isInAppBrowser: boolean;
   isMobileViewport: boolean;
 } {
@@ -30,6 +34,7 @@ function detectEnvironment(): {
     return {
       isStandalone: false,
       isIos: false,
+      iosBrowser: 'safari',
       isInAppBrowser: false,
       isMobileViewport: false,
     };
@@ -48,9 +53,20 @@ function detectEnvironment(): {
   const isInAppBrowser =
     /Zalo|FBAN|FBAV|FB_IAB|Messenger|Instagram|Line\/|musical_ly|TikTok/i.test(ua);
 
+  let iosBrowser: IosBrowserKind = 'other';
+  if (isIos) {
+    if (/CriOS/i.test(ua)) {
+      iosBrowser = 'chrome';
+    } else if (/Safari/i.test(ua) && !/FxiOS|EdgiOS|OPiOS|DuckDuckGo/i.test(ua) && !isInAppBrowser) {
+      iosBrowser = 'safari';
+    } else {
+      iosBrowser = 'other';
+    }
+  }
+
   const isMobileViewport = window.innerWidth < 1024;
 
-  return { isStandalone, isIos, isInAppBrowser, isMobileViewport };
+  return { isStandalone, isIos, iosBrowser, isInAppBrowser, isMobileViewport };
 }
 
 function loadDismissed(): boolean {
@@ -135,6 +151,7 @@ export function usePwaInstall(): PwaInstallState {
   return {
     isStandalone: env.isStandalone,
     isIos: env.isIos,
+    iosBrowser: env.iosBrowser,
     isInAppBrowser: env.isInAppBrowser,
     canNativeInstall,
     showAutoBanner,
